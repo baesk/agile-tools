@@ -1,0 +1,145 @@
+/* ============================================================
+   University of Melbourne — Typography
+   Source: Visual Identity Guidelines V2, pp. 19–26
+   - Fraunces: master headings only. Digital ≥30pt. Sentence case.
+     Variable settings (web): wght 300–600, SOFT 50, WONK 0, opsz 72.
+     Lighter weights are sophisticated; heavier weights playful.
+     Never embellish (no shadows/outlines). Italics: sparingly.
+   - Source Sans 3: subheadings + body copy. Title/sentence case.
+   - Office fallback: Georgia (for Fraunces), Arial (for both).
+   ============================================================ */
+
+:root {
+  /* ---- Families ------------------------------------------- */
+  --font-display: 'Fraunces', Georgia, 'Times New Roman', serif;
+  --font-body: 'Source Sans 3', Arial, Helvetica, sans-serif;
+  /* Office / web-safe equivalents — use in PPT/Word/Excel exports */
+  --font-display-office: Georgia, serif;
+  --font-body-office: Arial, sans-serif;
+
+  /* ---- Fraunces variable axes (recommended web settings) -- */
+  --fraunces-soft: 50;   /* @kind other */
+  --fraunces-wonk: 0;    /* @kind other */
+
+  /* ---- Weights -------------------------------------------- */
+  --w-light: 300;     /* @kind font */
+  --w-regular: 400;   /* @kind font */
+  --w-semibold: 600;  /* @kind font */
+  --w-bold: 700;      /* @kind font */
+
+  /* ---- Type scale (px @ screen) --------------------------- */
+  --t-display:   72px;   /* hero headline               */
+  --t-h1:        52px;   /* heading large               */
+  --t-h2:        38px;   /* heading medium              */
+  --t-h3:        28px;   /* heading small (Fraunces min ~30) */
+  --t-subhead:   20px;   /* Source Sans subheading      */
+  --t-lead:      22px;   /* intro copy (can be Fraunces) */
+  --t-body:      17px;   /* body copy                   */
+  --t-small:     14px;   /* meta / captions             */
+  --t-fine:      12px;   /* CRICOS, footnotes (min 6pt print) */
+
+  /* ---- Leading -------------------------------------------- */
+  --lh-display: 1.04;    /* @kind other */
+  --lh-heading: 1.08;    /* @kind other */
+  --lh-body: 1.5;        /* @kind other */
+  --lh-tight: 1.2;       /* @kind other */
+
+  /* ---- Tracking ------------------------------------------- */
+  --tracking-display: -0.01em;  /* @kind other */
+  --tracking-body: 0;    /* @kind other */
+}
+
+/* ---- Headings: Fraunces, sentence case ------------------- */
+.um-display,
+.um-h1,
+.um-h2,
+.um-h3 {
+  font-family: var(--font-display);
+  font-weight: var(--w-light);
+  line-height: var(--lh-display);
+  letter-spacing: var(--tracking-display);
+  color: var(--text-strong);
+  font-variation-settings: 'SOFT' 50, 'WONK' 0, 'opsz' 72;
+  text-wrap: balance;
+  margin: 0;
+}
+.um-display { font-size: var(--t-display); }
+.um-h1 { font-size: var(--t-h1); }
+.um-h2 { font-size: var(--t-h2); font-weight: var(--w-regular); }
+.um-h3 { font-size: var(--t-h3); font-weight: var(--w-regular); line-height: var(--lh-heading); }
+
+/* Headings highlight word: italics, sparingly */
+.um-heading-em { font-style: italic; font-weight: var(--w-light); }
+
+/* ---- Subheadings: Source Sans 3 -------------------------- */
+.um-subhead {
+  font-family: var(--font-body);
+  font-weight: var(--w-semibold);
+  font-size: var(--t-subhead);
+  line-height: var(--lh-tight);
+  letter-spacing: 0;
+  color: var(--text-strong);
+  margin: 0;
+}
+
+/* ---- Lead / intro copy ----------------------------------- */
+.um-lead {
+  font-family: var(--font-display);
+  font-weight: var(--w-light);
+  font-size: var(--t-lead);
+  line-height: 1.3;
+  color: var(--text-strong);
+  margin: 0;
+}
+
+/* ---- Body ------------------------------------------------- */
+.um-body {
+  font-family: var(--font-body);
+  font-weight: var(--w-regular);
+  font-size: var(--t-body);
+  line-height: var(--lh-body);
+  color: var(--text-body);
+  text-wrap: pretty;
+  margin: 0;
+}
+
+/* ---- Paragraph heading (title case, never italic) -------- */
+.um-para-heading {
+  font-family: var(--font-body);
+  font-weight: var(--w-bold);
+  font-size: var(--t-body);
+  line-height: var(--lh-tight);
+  color: var(--text-strong);
+  margin: 0;
+}
+
+/* ---- Small / functional copy ----------------------------- */
+.um-small {
+  font-family: var(--font-body);
+  font-weight: var(--w-regular);
+  font-size: var(--t-small);
+  line-height: 1.4;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+/* ---- Eyebrow / overline (functional label) --------------- */
+.um-eyebrow {
+  font-family: var(--font-body);
+  font-weight: var(--w-bold);
+  font-size: var(--t-small);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+/* ---- CRICOS line ----------------------------------------- */
+.um-cricos {
+  font-family: var(--font-body);
+  font-weight: var(--w-regular);
+  font-size: var(--t-fine);
+  letter-spacing: 0.02em;
+  color: var(--text-muted);
+  margin: 0;
+}

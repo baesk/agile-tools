@@ -1,0 +1,59 @@
+/* ============================================================
+   University of Melbourne — Spacing, radii, borders, shadow
+   The brand is built on a modular square grid (Fibonacci).
+   Spacing steps echo that: a small base unit scaled up.
+   Visual language is FLAT — borders & generous space do the
+   work that shadows would elsewhere. Square corners dominate;
+   radii are minimal and reserved for digital UI affordances.
+   ============================================================ */
+
+:root {
+  /* ---- Spacing scale (4px base) --------------------------- */
+  --space-0: 0;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+  --space-9: 96px;
+  --space-10: 128px;
+
+  /* ---- Modular grid -------------------------------------- */
+  --module: 160px;          /* a "1" module reference size     */
+  --grid-gutter: 2px;       /* hairline gap between modules     */
+  --outer-margin: 5%;       /* outer margin = 5% of smallest side */
+  --inner-margin: 24px;     /* inner margin within a module     */
+
+  /* ---- Radii (kept tight — the brand is square) ----------- */
+  --radius-0: 0;            /* default: square, like the logo  */
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --radius-pill: 999px;     /* tags / status chips only        */
+
+  /* ---- Borders ------------------------------------------- */
+  --border-width: 1px;
+  --border-width-strong: 2px;
+  --border: var(--border-width) solid var(--border-subtle);
+  --border-hero-line: var(--border-width-strong) solid var(--heritage-blue);
+
+  /* ---- Elevation -----------------------------------------
+     Used very sparingly (digital UI only). The print brand is
+     flat; on screen a faint shadow lifts cards off the page.   */
+  --shadow-none: none;
+  --shadow-card: 0 1px 2px rgba(0, 15, 70, 0.06), 0 8px 24px rgba(0, 15, 70, 0.06);
+  --shadow-pop: 0 4px 12px rgba(0, 15, 70, 0.10), 0 16px 48px rgba(0, 15, 70, 0.12);
+
+  /* ---- Motion --------------------------------------------
+     Restrained. Quick, confident fades — no bounce.            */
+  --ease: cubic-bezier(0.2, 0, 0.1, 1); /* @kind other */
+  --dur-fast: 120ms; /* @kind other */
+  --dur: 200ms;      /* @kind other */
+  --dur-slow: 360ms; /* @kind other */
+
+  /* ---- Layout widths ------------------------------------- */
+  --measure: 64ch;          /* @kind other */
+  --container: 1200px;
+}

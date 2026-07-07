@@ -1,0 +1,19 @@
+Key,Summary,Issue Type,Status,Priority,Assignee,Reporter,Business Area,Story Points,Components,Labels,Created,Updated
+SAMP-101,Enable single sign-on for the enrolment portal,Story,Done,High,A. Nguyen,P. Owner,Admissions,8,Authentication,security,2026-06-02,2026-06-19
+SAMP-102,Surface real-time fee balances on the student dashboard,Story,Done,High,R. Patel,P. Owner,Finance,5,Payments,finance,2026-06-02,2026-06-18
+SAMP-103,Add course-plan export to PDF,Story,Done,Medium,M. Silva,P. Owner,Course Planning,3,Reporting,export,2026-06-03,2026-06-17
+SAMP-104,Fix timetable clash warning on mobile,Bug,Done,High,J. Chen,P. Owner,Timetabling,2,Scheduling,mobile;bug,2026-06-03,2026-06-16
+SAMP-105,Accessibility pass on notification centre,Story,Done,Medium,L. Brown,P. Owner,Student Experience,5,Notifications,a11y,2026-06-04,2026-06-20
+SAMP-106,Cache faculty reference data for faster search,Story,Done,Low,A. Nguyen,P. Owner,Course Planning,3,Search,performance,2026-06-04,2026-06-15
+SAMP-107,Retry logic for failed payment webhooks,Story,Done,High,R. Patel,P. Owner,Finance,5,Payments,resilience,2026-06-05,2026-06-19
+SAMP-108,Update consent copy on data-sharing screen,Task,Done,Medium,L. Brown,P. Owner,Admissions,1,Notifications,content,2026-06-05,2026-06-14
+SAMP-109,Role-based access for advisor accounts,Story,Done,High,M. Silva,P. Owner,Advising,8,Authentication,security,2026-06-06,2026-06-21
+SAMP-110,Dashboard empty-state illustrations,Task,Done,Low,J. Chen,P. Owner,Student Experience,2,Notifications,design,2026-06-06,2026-06-13
+SAMP-111,Weekly engagement summary report,Story,Done,Medium,R. Patel,P. Owner,Advising,3,Reporting,analytics,2026-06-07,2026-06-20
+SAMP-112,Search filters for course catalogue,Story,In Progress,Medium,A. Nguyen,P. Owner,Course Planning,5,Search,,2026-06-08,2026-06-24
+SAMP-113,Bulk timetable import for coordinators,Story,In Progress,High,J. Chen,P. Owner,Timetabling,8,Scheduling,,2026-06-08,2026-06-24
+SAMP-114,Refund request workflow,Story,In Review,High,R. Patel,P. Owner,Finance,5,Payments,,2026-06-09,2026-06-25
+SAMP-115,Advisor appointment booking calendar,Story,To Do,Medium,M. Silva,P. Owner,Advising,13,Scheduling,,2026-06-09,2026-06-23
+SAMP-116,Push notifications for enrolment deadlines,Story,To Do,Medium,L. Brown,P. Owner,Admissions,5,Notifications,,2026-06-10,2026-06-22
+SAMP-117,Audit log viewer for security team,Story,Blocked,High,A. Nguyen,P. Owner,Student Experience,8,Authentication,dependency,2026-06-10,2026-06-24
+SAMP-118,Export engagement data to warehouse,Task,To Do,Low,R. Patel,P. Owner,Advising,3,Reporting,,2026-06-11,2026-06-21

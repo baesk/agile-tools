@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="_ds/university-of-melbourne-design-system-ba1c60e1-44aa-4acc-82aa-4515ae552e73/tokens/fonts.css">
+  <link rel="stylesheet" href="_ds/university-of-melbourne-design-system-ba1c60e1-44aa-4acc-82aa-4515ae552e73/tokens/colors.css">
+  <link rel="stylesheet" href="_ds/university-of-melbourne-design-system-ba1c60e1-44aa-4acc-82aa-4515ae552e73/tokens/typography.css">
+  <link rel="stylesheet" href="_ds/university-of-melbourne-design-system-ba1c60e1-44aa-4acc-82aa-4515ae552e73/tokens/spacing.css">
+  <link rel="stylesheet" href="_ds/university-of-melbourne-design-system-ba1c60e1-44aa-4acc-82aa-4515ae552e73/styles.css">
+  <script src="_ds/university-of-melbourne-design-system-ba1c60e1-44aa-4acc-82aa-4515ae552e73/_ds_bundle.js"></script>
+  <meta name="ext-resource-dependency" content="uploads/SAMP-Sample-Sprint-Data.csv" data-resource-id="sampleCsv">
+  <style>
+    html, body { margin: 0; padding: 0; }
+    a { color: #000F46; }
+    a:hover { color: #003C55; }
+    @media print {
+      @page { size: A4; margin: 14mm; }
+      body { background: #fff !important; }
+      .no-print { display: none !important; }
+      .report-card { box-shadow: none !important; width: 100% !important; }
+      .avoid-break { break-inside: avoid; }
+    }
+    textarea.seam, input.seam { font-family: inherit; }
+    textarea.seam:focus, input.seam:focus { outline: none; box-shadow: 0 0 0 3px rgba(0,15,70,0.10); }
+  </style>
+  <template id="__bundler_thumbnail" data-bg-color="#000F46">
+    <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+      <rect width="1200" height="800" fill="#000F46"></rect>
+      <rect x="360" y="210" width="480" height="380" rx="10" fill="#ffffff"></rect>
+      <rect x="360" y="210" width="480" height="66" fill="#000F46"></rect>
+      <rect x="392" y="236" width="150" height="14" rx="7" fill="#ffffff"></rect>
+      <rect x="392" y="316" width="416" height="12" rx="6" fill="#DDDEE6"></rect>
+      <rect x="392" y="352" width="330" height="12" rx="6" fill="#DDDEE6"></rect>
+      <rect x="392" y="424" width="96" height="46" rx="4" fill="#000F46"></rect>
+      <rect x="504" y="424" width="96" height="46" rx="4" fill="#46C8F0"></rect>
+      <rect x="616" y="424" width="96" height="46" rx="4" fill="#000F46"></rect>
+      <rect x="392" y="506" width="416" height="12" rx="6" fill="#9FB825"></rect>
+      <rect x="392" y="538" width="260" height="12" rx="6" fill="#DDDEE6"></rect>
+    </svg>
+  </template>
+</helmet>
+<div style="background:#F2F3F7; padding:28px 20px 60px; min-height:100vh; box-sizing:border-box; font-family:'Source Sans 3', Arial, sans-serif;">
+
+  <!-- toolbar (screen only) -->
+  <div class="no-print" style="width:794px; max-width:100%; margin:0 auto 14px; display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+    <div style="font-size:13px; color:#4A4E63; margin-right:auto; display:flex; align-items:center; gap:8px;">
+      <span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:{{ statusDot }};"></span>
+      <span>{{ sourceLabel }}</span>
+    </div>
+    <input type="file" accept=".csv,text/csv" ref="{{ fileRef }}" onchange="{{ onPick }}" style="display:none;">
+    <button onclick="{{ printReport }}" style="font-family:inherit; cursor:pointer; border:1px solid #C3C5D2; background:#fff; color:#000F46; font-weight:600; font-size:13.5px; padding:9px 16px; border-radius:3px;">Print / PDF</button>
+    <button onclick="{{ clearData }}" style="font-family:inherit; cursor:pointer; border:1px solid #C3C5D2; background:#fff; color:#8589A0; font-weight:600; font-size:13.5px; padding:9px 12px; border-radius:3px;">Clear</button>
+  </div>
+
+  <div class="report-card" style="width:794px; max-width:100%; margin:0 auto; background:#fff; box-shadow:0 1px 2px rgba(0,15,70,0.06), 0 8px 24px rgba(0,15,70,0.06); display:flex; flex-direction:column;">
+
+    <!-- header band -->
+    <div style="background:#000F46; color:#fff; display:flex; align-items:center; gap:16px; padding:22px 48px;">
+      <div style="min-width:0;">
+        <div style="font-family:'Fraunces', Georgia, serif; font-size:18px; line-height:1.1;">Sprint Review</div>
+      </div>
+      <div style="margin-left:auto; text-align:right; display:flex; flex-direction:column; align-items:flex-end; gap:3px;">
+        <select value="{{ monthVal }}" onchange="{{ onMonth }}" style="background:transparent; border:none; border-bottom:1px solid rgba(255,255,255,0.35); color:#fff; font-family:inherit; font-size:14px; font-weight:600; padding:3px 2px; cursor:pointer;">
+          <option value="" style="color:#000F46;">Select sprint month…</option>
+          <option value="January" style="color:#000F46;">January</option>
+          <option value="February" style="color:#000F46;">February</option>
+          <option value="March" style="color:#000F46;">March</option>
+          <option value="April" style="color:#000F46;">April</option>
+          <option value="May" style="color:#000F46;">May</option>
+          <option value="June" style="color:#000F46;">June</option>
+          <option value="July" style="color:#000F46;">July</option>
+          <option value="August" style="color:#000F46;">August</option>
+          <option value="September" style="color:#000F46;">September</option>
+          <option value="October" style="color:#000F46;">October</option>
+          <option value="November" style="color:#000F46;">November</option>
+          <option value="December" style="color:#000F46;">December</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- ============ EMPTY STATE ============ -->
+    <sc-if value="{{ noData }}" hint-placeholder-val="{{ true }}">
+      <div class="no-print" ondragover="{{ onDragOver }}" ondragleave="{{ onDragLeave }}" ondrop="{{ onDrop }}" style="{{ dropStyle }}">
+        <div style="width:56px; height:56px; border-radius:4px; background:#F2F3F7; display:flex; align-items:center; justify-content:center; margin:0 auto 18px;">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#000F46" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+        </div>
+        <div style="font-family:'Fraunces', Georgia, serif; font-weight:400; font-size:24px; color:#000F46; margin-bottom:8px; font-variation-settings:'SOFT' 50,'WONK' 0;">Import your Jira sprint export</div>
+        <p style="font-size:15px; line-height:1.5; color:#4A4E63; max-width:44ch; margin:0 auto 20px;">Drag a CSV here, or choose a file. Keys, summaries, business areas, statuses, story points and components populate automatically — nothing leaves your browser.</p>
+        <div style="display:flex; gap:10px; justify-content:center;">
+          <button onclick="{{ openPicker }}" style="font-family:inherit; cursor:pointer; border:none; background:#000F46; color:#fff; font-weight:600; font-size:14px; padding:11px 22px; border-radius:3px;">Choose CSV file</button>
+          <button onclick="{{ loadSample }}" style="font-family:inherit; cursor:pointer; border:1px solid #C3C5D2; background:#fff; color:#000F46; font-weight:600; font-size:14px; padding:11px 22px; border-radius:3px;">Load sample data</button>
+        </div>
+        <sc-if value="{{ errorMsg }}" hint-placeholder-val="">
+          <div style="margin-top:16px; color:#78000D; font-size:13.5px;">{{ errorMsg }}</div>
+        </sc-if>
+      </div>
+    </sc-if>
+
+    <!-- ============ REPORT ============ -->
+    <sc-if value="{{ hasData }}" hint-placeholder-val="">
+      <div style="padding:36px 48px 8px;">
+
+        <!-- goal + verdict -->
+        <div class="avoid-break" style="border-top:3px solid #000F46; padding-top:18px; margin-bottom:26px;">
+          <p style="font-size:12px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:#8589A0; margin:0 0 8px;">Sprint goal</p>
+          <textarea class="seam" value="{{ sprintGoalVal }}" onchange="{{ onGoal }}" placeholder="What was the team aiming to achieve this sprint? State the outcome in plain terms." rows="2" style="width:100%; box-sizing:border-box; resize:vertical; border:1px dashed #DDDEE6; border-radius:3px; padding:10px 12px; font-family:'Fraunces', Georgia, serif; font-weight:300; font-size:23px; line-height:1.25; color:#000F46; background:#fff; font-variation-settings:'SOFT' 50,'WONK' 0,'opsz' 72;"></textarea>
+          <div class="no-print" style="display:flex; align-items:center; gap:8px; margin-top:12px; flex-wrap:wrap;">
+            <span style="font-size:13px; color:#8589A0; margin-right:2px;">Goal outcome:</span>
+            <button onclick="{{ setMet }}" style="{{ metBtnStyle }}">Met</button>
+            <button onclick="{{ setPartial }}" style="{{ partialBtnStyle }}">Partially met</button>
+            <button onclick="{{ setMiss }}" style="{{ missBtnStyle }}">Not met</button>
+          </div>
+        </div>
+
+        <!-- verdict banner -->
+        <div class="avoid-break" style="{{ verdictBannerStyle }}">
+          <div style="font-weight:700; font-size:15px;">{{ verdictLabel }}</div>
+          <div style="font-size:14px; opacity:0.85;">{{ verdictSub }}</div>
+        </div>
+
+        <!-- metric strip -->
+        <div class="avoid-break" style="display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:#DDDEE6; border:1px solid #DDDEE6; border-radius:4px; overflow:hidden; margin:22px 0 30px;">
+          <div style="background:#fff; padding:16px 18px;">
+            <div style="font-family:'Fraunces', Georgia, serif; font-weight:400; font-size:30px; color:#000F46; line-height:1;">{{ ptsDone }}</div>
+            <div style="font-size:13px; color:#8589A0; margin-top:6px;">Points completed</div>
+            <div style="font-size:11.5px; color:#ABB0C4; margin-top:2px;">velocity this sprint</div>
+          </div>
+          <div style="background:#fff; padding:16px 18px;">
+            <div style="font-family:'Fraunces', Georgia, serif; font-weight:400; font-size:30px; color:#000F46; line-height:1;">{{ ptsCarried }}</div>
+            <div style="font-size:13px; color:#8589A0; margin-top:6px;">Points carried over</div>
+            <div style="font-size:11.5px; color:#ABB0C4; margin-top:2px;">{{ carriedItemsLabel }}</div>
+          </div>
+          <div style="background:#fff; padding:16px 18px;">
+            <div style="font-family:'Fraunces', Georgia, serif; font-weight:400; font-size:30px; color:#000F46; line-height:1;">{{ pctLabel }}</div>
+            <div style="font-size:13px; color:#8589A0; margin-top:6px;">Points completed</div>
+            <div style="font-size:11.5px; color:#ABB0C4; margin-top:2px;">of {{ ptsTotal }} committed</div>
+          </div>
+          <div style="background:#fff; padding:16px 18px;">
+            <div style="font-family:'Fraunces', Georgia, serif; font-weight:400; font-size:30px; color:#000F46; line-height:1;">{{ itemsDoneLabel }}</div>
+            <div style="font-size:13px; color:#8589A0; margin-top:6px;">Items completed</div>
+            <div style="font-size:11.5px; color:#ABB0C4; margin-top:2px;">of {{ totalItems }} in sprint</div>
+          </div>
+        </div>
+
+        <!-- engagement -->
+        <sc-if value="{{ showEngagementSection }}" hint-placeholder-val="">
+          <div class="avoid-break" style="display:grid; grid-template-columns:1fr 1fr; gap:28px; margin-bottom:30px;">
+            <div>
+              <h2 style="font-family:'Fraunces', Georgia, serif; font-weight:400; font-size:19px; color:#000F46; margin:0 0 12px; font-variation-settings:'SOFT' 50,'WONK' 0;">Business areas engaged</h2>
+              <sc-for list="{{ areaBars }}" as="bar" hint-placeholder-count="4">
+                <div style="display:flex; align-items:center; gap:10px; margin-bottom:9px;">
+                  <div style="width:34%; font-size:13px; color:#4A4E63; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ bar.name }}</div>
+                  <div style="flex:1; height:14px; background:#F2F3F7; border-radius:2px; overflow:hidden;">
+                    <div style="{{ bar.fillStyle }}"></div>
+                  </div>
+                  <div style="width:22px; text-align:right; font-size:13px; font-weight:600; color:#000F46;">{{ bar.count }}</div>
+                </div>
+              </sc-for>
+            </div>
+            <div>
+              <h2 style="font-family:'Fraunces', Georgia, serif; font-weight:400; font-size:19px; color:#000F46; margin:0 0 12px; font-variation-settings:'SOFT' 50,'WONK' 0;">Components touched</h2>
+              <sc-if value="{{ hasComponents }}" hint-placeholder-val="{{ true }}">
+                <sc-for list="{{ compBars }}" as="bar" hint-placeholder-count="3">
+                  <div style="display:flex; align-items:center; gap:10px; margin-bottom:9px;">
+                    <div style="width:34%; font-size:13px; color:#4A4E63; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ bar.name }}</div>
+                    <div style="flex:1; height:14px; background:#F2F3F7; border-radius:2px; overflow:hidden;">
+                      <div style="{{ bar.fillStyle }}"></div>
+                    </div>
+                    <div style="width:22px; text-align:right; font-size:13px; font-weight:600; color:#000F46;">{{ bar.count }}</div>
+                  </div>
+                </sc-for>
+              </sc-if>
+              <sc-if value="{{ noComponents }}" hint-placeholder-val="">
+                <p style="font-size:13.5px; color:#8589A0; margin:0;">No component data in this export.</p>
+              </sc-if>
+            </div>
+          </div>
+        </sc-if>
+
+        <!-- completed list -->
+        <div class="avoid-break" style="margin-bottom:26px;">
+          <button onclick="{{ toggleCompleted }}" style="width:100%; display:flex; align-items:center; gap:12px; background:none; border:none; border-bottom:2px solid #DDDEE6; padding:0 0 8px; margin-bottom:0; cursor:pointer; font-family:inherit; text-align:left;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#000F46" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="{{ completedChevron }}"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            <h2 style="font-family:'Fraunces', Georgia, serif; font-weight:400; font-size:22px; color:#000F46; margin:0; font-variation-settings:'SOFT' 50,'WONK' 0;">Completed this sprint</h2>
+            <span style="margin-left:auto; font-size:13px; font-weight:600; color:#2C421D; background:#EAF0DC; padding:3px 11px; border-radius:20px;">{{ completedCount }} items · {{ ptsDone }} pts</span>
+          </button>
+          <sc-if value="{{ showCompleted }}" hint-placeholder-val="{{ true }}">
+            <div>
+              <sc-if value="{{ completedHasItems }}" hint-placeholder-val="{{ true }}">
+                <div style="width:100%; font-size:14px;">
+                  <div style="display:grid; grid-template-columns:88px 1fr 120px 64px; background:#000F46; color:#fff; font-weight:600; font-size:12px;">
+                    <div style="padding:9px 12px;">Key</div>
+                    <div style="padding:9px 12px;">Summary</div>
+                    <div style="padding:9px 12px;">Status</div>
+                    <div style="padding:9px 12px; text-align:right;">Points</div>
+                  </div>
+                  <sc-for list="{{ completedRows }}" as="row" hint-placeholder-count="3">
+                    <div style="display:grid; grid-template-columns:88px 1fr 120px 64px; align-items:start; border-bottom:1px solid #DDDEE6; {{ row.trStyle }}">
+                      <div style="padding:10px 12px; font-family:ui-monospace,monospace; font-size:12.5px; font-weight:600;"><a href="{{ row.keyHref }}" target="_blank" rel="noopener" style="color:#000F46; text-decoration:none; border-bottom:1px solid rgba(0,15,70,0.28);" style-hover="border-bottom-color:#000F46">{{ row.key }}</a></div>
+                      <div style="padding:10px 12px; color:#33374A; line-height:1.35;">{{ row.summary }}</div>
+                      <div style="padding:10px 12px;"><span style="{{ row.badgeStyle }}">{{ row.status }}</span></div>
+                      <div style="padding:10px 12px; text-align:right; font-size:13px; color:#000F46; font-weight:600;">{{ row.points }}</div>
+                    </div>
+                  </sc-for>
+                </div>
+              </sc-if>
+              <sc-if value="{{ completedEmpty }}" hint-placeholder-val="">
+                <p style="font-size:14px; color:#8589A0; padding:14px 2px 2px; margin:0;">No items reached a done status in this export.</p>
+              </sc-if>
+            </div>
+          </sc-if>
+        </div>
+
+        <!-- incomplete list -->
+        <div class="avoid-break" style="margin-bottom:30px;">
+          <button onclick="{{ toggleIncomplete }}" style="width:100%; display:flex; align-items:center; gap:12px; background:none; border:none; border-bottom:2px solid #DDDEE6; padding:0 0 8px; cursor:pointer; font-family:inherit; text-align:left;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#000F46" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="{{ incompleteChevron }}"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            <h2 style="font-family:'Fraunces', Georgia, serif; font-weight:400; font-size:22px; color:#000F46; margin:0; font-variation-settings:'SOFT' 50,'WONK' 0;">Carried over / incomplete</h2>
+            <span style="margin-left:auto; font-size:13px; font-weight:600; color:#5A5E73; background:#EDEEF3; padding:3px 11px; border-radius:20px;">{{ incompleteCount }} items · {{ ptsCarried }} pts</span>
+          </button>
+          <sc-if value="{{ showIncomplete }}" hint-placeholder-val="{{ true }}">
+            <div>
+              <sc-if value="{{ incompleteHasItems }}" hint-placeholder-val="{{ true }}">
+                <div style="width:100%; font-size:14px;">
+                  <div style="display:grid; grid-template-columns:88px 1fr 120px 64px; background:#000F46; color:#fff; font-weight:600; font-size:12px;">
+                    <div style="padding:9px 12px;">Key</div>
+                    <div style="padding:9px 12px;">Summary</div>
+                    <div style="padding:9px 12px;">Status</div>
+                    <div style="padding:9px 12px; text-align:right;">Points</div>
+                  </div>
+                  <sc-for list="{{ incompleteRows }}" as="row" hint-placeholder-count="5">
+                    <div style="display:grid; grid-template-columns:88px 1fr 120px 64px; align-items:start; border-bottom:1px solid #DDDEE6; {{ row.trStyle }}">
+                      <div style="padding:10px 12px; font-family:ui-monospace,monospace; font-size:12.5px; font-weight:600;"><a href="{{ row.keyHref }}" target="_blank" rel="noopener" style="color:#000F46; text-decoration:none; border-bottom:1px solid rgba(0,15,70,0.28);" style-hover="border-bottom-color:#000F46">{{ row.key }}</a></div>
+                      <div style="padding:10px 12px; color:#33374A; line-height:1.35;">{{ row.summary }}</div>
+                      <div style="padding:10px 12px;"><span style="{{ row.badgeStyle }}">{{ row.status }}</span></div>
+                      <div style="padding:10px 12px; text-align:right; font-size:13px; color:#000F46; font-weight:600;">{{ row.points }}</div>
+                    </div>
+                  </sc-for>
+                </div>
+              </sc-if>
+              <sc-if value="{{ incompleteEmpty }}" hint-placeholder-val="">
+                <p style="font-size:14px; color:#8589A0; padding:14px 2px 2px; margin:0;">Everything committed was completed — no carry-over.</p>
+              </sc-if>
+            </div>
+          </sc-if>
+        </div>
+
+        <!-- carry-over reasons + next focus -->
+        <div class="avoid-break" style="display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-bottom:8px;">
+          <div>
+            <h2 style="font-family:'Fraunces', Georgia, serif; font-weight:400; font-size:19px; color:#000F46; margin:0 0 10px; font-variation-settings:'SOFT' 50,'WONK' 0;">Carry-over reasons &amp; impediments</h2>
+            <textarea class="seam" value="{{ carryVal }}" onchange="{{ onCarry }}" placeholder="Why did items carry over? Note blockers, dependencies or scope changes — one per line." rows="5" style="width:100%; box-sizing:border-box; resize:vertical; border:1px dashed #DDDEE6; border-radius:3px; padding:10px 12px; font-size:14.5px; line-height:1.55; color:#33374A; background:#fff;"></textarea>
+          </div>
+          <div>
+            <h2 style="font-family:'Fraunces', Georgia, serif; font-weight:400; font-size:19px; color:#000F46; margin:0 0 10px; font-variation-settings:'SOFT' 50,'WONK' 0;">Focus for next sprint</h2>
+            <textarea class="seam" value="{{ nextFocusVal }}" onchange="{{ onFocus }}" placeholder="What will the team pick up next, and why?" rows="5" style="width:100%; box-sizing:border-box; resize:vertical; border:1px dashed #DDDEE6; border-radius:3px; padding:10px 12px; font-size:14.5px; line-height:1.55; color:#33374A; background:#fff;"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- footer -->
+      <div style="border-top:2px solid #000F46; padding:14px 48px; display:flex; justify-content:space-between; font-size:12.5px; color:#8589A0;">
+        <span>{{ footerLabel }}</span>
+      </div>
+    </sc-if>
+
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;: {&quot;width&quot;: 900, &quot;height&quot;: 1180}, &quot;accent&quot;: {&quot;editor&quot;: &quot;color&quot;, &quot;default&quot;: &quot;#46C8F0&quot;, &quot;options&quot;: [&quot;#46C8F0&quot;, &quot;#9FB825&quot;, &quot;#FFD629&quot;, &quot;#EB7BBE&quot;, &quot;#000F46&quot;], &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Appearance&quot;}, &quot;showEngagement&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Sections&quot;}}">
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.fileRef = React.createRef();
+    this.state = {
+      rows: null,
+      fileName: '',
+      sprintName: '',
+      month: '',
+      sprintGoal: '',
+      nextFocus: '',
+      carry: '',
+      verdict: 'met',
+      dragging: false,
+      error: '',
+      showCompleted: true,
+      showIncomplete: true,
+    };
+  }
+
+  DONE = ['done', 'closed', 'resolved', 'complete', 'completed'];
+  STORE = 'umSprintReport_v1';
+
+  componentDidMount() {
+    try {
+      const saved = JSON.parse(localStorage.getItem(this.STORE) || 'null');
+      if (saved && typeof saved === 'object') {
+        this.setState(s => ({ ...s, ...saved, dragging: false, error: '' }));
+      }
+    } catch (e) {}
+  }
+
+  persist(patch) {
+    this.setState(patch, () => {
+      const { dragging, error, ...keep } = this.state;
+      try { localStorage.setItem(this.STORE, JSON.stringify(keep)); } catch (e) {}
+    });
+  }
+
+  parseCSV(text) {
+    const rows = [];
+    let field = '', row = [], inQ = false;
+    text = text.replace(/^\uFEFF/, '');
+    const pushF = () => { row.push(field); field = ''; };
+    const pushR = () => { rows.push(row); row = []; };
+    for (let i = 0; i < text.length; i++) {
+      const c = text[i];
+      if (inQ) {
+        if (c === '"') { if (text[i + 1] === '"') { field += '"'; i++; } else inQ = false; }
+        else field += c;
+      } else {
+        if (c === '"') inQ = true;
+        else if (c === ',') pushF();
+        else if (c === '\r') { /* skip */ }
+        else if (c === '\n') { pushF(); pushR(); }
+        else field += c;
+      }
+    }
+    if (field.length || row.length) { pushF(); pushR(); }
+    const clean = rows.filter(r => r.some(c => (c || '').trim() !== ''));
+    if (clean.length < 2) return [];
+    const header = clean[0].map(h => (h || '').trim());
+    return clean.slice(1).map(r => {
+      const o = {};
+      header.forEach((h, idx) => { o[h] = (r[idx] || '').trim(); });
+      return o;
+    });
+  }
+
+  ingest(text, name) {
+    try {
+      const data = this.parseCSV(text);
+      if (!data.length || !('Key' in data[0] || 'Summary' in data[0])) {
+        this.setState({ error: 'That file did not look like a Jira CSV export (no Key / Summary columns found).' });
+        return;
+      }
+      this.persist({ rows: data, fileName: name, error: '', dragging: false });
+    } catch (e) {
+      this.setState({ error: 'Could not read that file.' });
+    }
+  }
+
+  readFile(file) {
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = e => this.ingest(e.target.result, file.name);
+    reader.onerror = () => this.setState({ error: 'Could not read that file.' });
+    reader.readAsText(file);
+  }
+
+  num(v) { const n = parseFloat(v); return isNaN(n) ? 0 : n; }
+  tidy(n) { return Number.isInteger(n) ? String(n) : n.toFixed(1); }
+
+  isDone(r) { return this.DONE.includes((r.Status || '').trim().toLowerCase()); }
+
+  badge(status) {
+    const s = (status || '').toLowerCase();
+    let bg = '#EDEEF3', fg = '#5A5E73';
+    if (this.isDone({ Status: status })) { bg = '#EAF0DC'; fg = '#2C421D'; }
+    else if (s.includes('progress')) { bg = '#DDF3FB'; fg = '#003C55'; }
+    else if (s.includes('review') || s.includes('qa') || s.includes('test')) { bg = '#FFF3CC'; fg = '#A84500'; }
+    else if (s.includes('block') || s.includes('impede')) { bg = '#FBE0E2'; fg = '#78000D'; }
+    return 'display:inline-block; background:' + bg + '; color:' + fg + '; font-weight:600; font-size:12px; padding:3px 10px; border-radius:2px; white-space:nowrap;';
+  }
+
+  tally(rows, field) {
+    const m = {};
+    rows.forEach(r => {
+      (r[field] || '').split(',').map(x => x.trim()).filter(Boolean).forEach(v => { m[v] = (m[v] || 0) + 1; });
+    });
+    return Object.entries(m).sort((a, b) => b[1] - a[1]);
+  }
+
+  renderVals() {
+    const s = this.state;
+    const rows = s.rows || [];
+    const hasData = rows.length > 0;
+    const accent = this.props.accent || '#46C8F0';
+    const showEng = this.props.showEngagement !== false;
+
+    const completed = rows.filter(r => this.isDone(r));
+    const incomplete = rows.filter(r => !this.isDone(r));
+    const sum = arr => arr.reduce((a, r) => a + this.num(r['Story Points']), 0);
+    const ptsDone = sum(completed);
+    const ptsCarried = sum(incomplete);
+    const ptsTotal = ptsDone + ptsCarried;
+    const pct = ptsTotal ? Math.round((ptsDone / ptsTotal) * 100) : 0;
+
+    const mkRow = (r, i) => ({
+      key: r.Key || '—',
+      keyHref: r.Key ? 'https://unimelb.atlassian.net/browse/' + encodeURIComponent(String(r.Key).trim()) : null,
+      summary: r.Summary || '—',
+      area: r['Business Area'] || '—',
+      points: this.num(r['Story Points']) ? this.tidy(this.num(r['Story Points'])) : '—',
+      status: r.Status || '—',
+      badgeStyle: this.badge(r.Status),
+      trStyle: (i % 2) ? 'background:#F7F7F4;' : 'background:#fff;',
+    });
+
+    const bars = (tally) => {
+      const max = tally.length ? tally[0][1] : 1;
+      return tally.slice(0, 7).map(([name, count]) => ({
+        name, count,
+        fillStyle: 'height:100%; width:' + Math.max(6, Math.round((count / max) * 100)) + '%; background:' + accent + ';',
+      }));
+    };
+    const areaBars = bars(this.tally(rows, 'Business Area'));
+    const compBars = bars(this.tally(rows, 'Components'));
+
+    const vMap = {
+      met:     { label: 'Sprint goal met', sub: 'The team achieved the outcome it committed to.', bg: '#EAF0DC', fg: '#2C421D', bd: '#9FB825' },
+      partial: { label: 'Sprint goal partially met', sub: 'Core outcome delivered; some scope carried over.', bg: '#FFF3CC', fg: '#A84500', bd: '#FFD629' },
+      miss:    { label: 'Sprint goal not met', sub: 'The committed outcome was not achieved this sprint.', bg: '#FBE0E2', fg: '#78000D', bd: '#FF2D3C' },
+    };
+    const v = vMap[s.verdict] || vMap.met;
+    const vBanner = 'display:flex; align-items:center; justify-content:space-between; gap:16px; padding:12px 16px; border-radius:3px; border-left:4px solid ' + v.bd + '; background:' + v.bg + '; color:' + v.fg + ';';
+
+    const vbtn = (active) => active
+      ? 'font-family:inherit; cursor:pointer; border:1px solid #000F46; background:#000F46; color:#fff; font-weight:600; font-size:13px; padding:6px 13px; border-radius:20px;'
+      : 'font-family:inherit; cursor:pointer; border:1px solid #C3C5D2; background:#fff; color:#4A4E63; font-weight:600; font-size:13px; padding:6px 13px; border-radius:20px;';
+
+    const dropBase = 'text-align:center; margin:36px; padding:52px 32px; border:2px dashed ';
+    const dropStyle = dropBase + (s.dragging ? '#000F46; background:#F2F3F7;' : '#C3C5D2; background:#fff;') + ' border-radius:6px; transition:background .15s, border-color .15s;';
+
+    const bind = (field) => (e) => this.persist({ [field]: e.target.value });
+    const footerLabel = (s.month ? s.month + ' sprint' : 'Sprint review') + ' · Prepared for delivery & stakeholder review';
+
+    return {
+      // toolbar / source
+      sourceLabel: hasData ? (s.fileName || 'Imported data') + ' · ' + rows.length + ' issues' : 'No data imported yet',
+      statusDot: hasData ? '#9FB825' : '#C3C5D2',
+      fileRef: this.fileRef,
+      openPicker: () => this.fileRef.current && this.fileRef.current.click(),
+      onPick: (e) => { this.readFile(e.target.files[0]); e.target.value = ''; },
+      loadSample: () => {
+        fetch((window.__resources && window.__resources.sampleCsv) || 'uploads/SAMP-Sample-Sprint-Data.csv')
+          .then(r => { if (!r.ok) throw 0; return r.text(); })
+          .then(t => this.ingest(t, 'SAMP-Sample-Sprint-Data.csv (sample)'))
+          .catch(() => this.setState({ error: 'Sample file not found — use Choose CSV file instead.' }));
+      },
+      printReport: () => window.print(),
+      clearData: () => { try { localStorage.removeItem(this.STORE); } catch (e) {} this.setState({ rows: null, fileName: '', error: '' }); },
+
+      // states
+      noData: !hasData,
+      hasData: hasData,
+      errorMsg: s.error || '',
+      dropStyle,
+      onDragOver: (e) => { e.preventDefault(); if (!s.dragging) this.setState({ dragging: true }); },
+      onDragLeave: (e) => { e.preventDefault(); this.setState({ dragging: false }); },
+      onDrop: (e) => { e.preventDefault(); this.setState({ dragging: false }); this.readFile(e.dataTransfer.files[0]); },
+
+      // editable narrative
+      sprintNameVal: s.sprintName,
+      monthVal: s.month || '',
+      onMonth: bind('month'),
+      footerLabel,
+      sprintGoalVal: s.sprintGoal,
+      nextFocusVal: s.nextFocus,
+      carryVal: s.carry,
+      onSprintName: bind('sprintName'),
+      onSprintDates: bind('sprintDates'),
+      onGoal: bind('sprintGoal'),
+      onFocus: bind('nextFocus'),
+      onCarry: bind('carry'),
+
+      // verdict
+      verdictLabel: v.label,
+      verdictSub: v.sub,
+      verdictBannerStyle: vBanner,
+      metBtnStyle: vbtn(s.verdict === 'met'),
+      partialBtnStyle: vbtn(s.verdict === 'partial'),
+      missBtnStyle: vbtn(s.verdict === 'miss'),
+      setMet: () => this.persist({ verdict: 'met' }),
+      setPartial: () => this.persist({ verdict: 'partial' }),
+      setMiss: () => this.persist({ verdict: 'miss' }),
+
+      // metrics
+      ptsDone: this.tidy(ptsDone),
+      ptsCarried: this.tidy(ptsCarried),
+      ptsTotal: this.tidy(ptsTotal),
+      pctLabel: pct + '%',
+      itemsDoneLabel: String(completed.length),
+      totalItems: String(rows.length),
+      carriedItemsLabel: incomplete.length + ' item' + (incomplete.length === 1 ? '' : 's'),
+
+      // engagement
+      showEngagementSection: hasData && showEng,
+      areaBars,
+      compBars,
+      hasComponents: compBars.length > 0,
+      noComponents: compBars.length === 0,
+
+      // completed
+      completedRows: completed.map(mkRow),
+      completedCount: completed.length,
+      completedHasItems: completed.length > 0,
+      completedEmpty: completed.length === 0,
+      showCompleted: s.showCompleted,
+      toggleCompleted: () => this.setState(st => ({ showCompleted: !st.showCompleted })),
+      completedChevron: 'transition:transform .15s; transform:rotate(' + (s.showCompleted ? 90 : 0) + 'deg);',
+
+      // incomplete
+      incompleteRows: incomplete.map(mkRow),
+      incompleteCount: incomplete.length,
+      incompleteHasItems: incomplete.length > 0,
+      incompleteEmpty: incomplete.length === 0,
+      showIncomplete: s.showIncomplete,
+      toggleIncomplete: () => this.setState(st => ({ showIncomplete: !st.showIncomplete })),
+      incompleteChevron: 'transition:transform .15s; transform:rotate(' + (s.showIncomplete ? 90 : 0) + 'deg);',
+    };
+  }
+}
+</script>
+</body>
+</html>

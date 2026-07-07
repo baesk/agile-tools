@@ -1,0 +1,79 @@
+/* ============================================================
+   University of Melbourne — Colour palette
+   Source: Visual Identity Guidelines V2 (July 2025), pp. 12–18
+   Rule: Traditional Heritage Blue is the HERO colour in every
+   execution. Pair with ONE secondary colour (+ its shade) max.
+   Flat colour only — no gradients, shadows or highlights.
+   ============================================================ */
+
+:root {
+  /* ---- Primary -------------------------------------------- */
+  --heritage-blue: #000F46;        /* Traditional Heritage Blue — PMS 2757 */
+
+  /* ---- Secondary: Colours of Country ---------------------- */
+  /* (inspired by Billibellary's Walk, Parkville campus)        */
+  --river-red-gum: #9FB825;        /* PMS 382  */
+  --river-red-gum-shade: #2C421D;  /* PMS 7743 */
+
+  --black-sheoak: #FF2D3C;         /* PMS Warm Red */
+  --black-sheoak-shade: #78000D;   /* PMS 201 */
+
+  --yam-daisy: #FFD629;            /* PMS 116 */
+  --yam-daisy-shade: #A84500;      /* PMS 1595 */
+
+  --kookaburra: #46C8F0;           /* Laughing Kookaburra — PMS 2985 */
+  --kookaburra-shade: #003C55;     /* PMS 7701 */
+
+  --possum: #EB7BBE;               /* PMS 2037 */
+  --possum-shade: #73234B;         /* PMS 682 */
+
+  --greenstone: #ABC1A7;           /* Mt William Greenstone — PMS 5595 */
+  --greenstone-shade: #444A40;     /* PMS 4193 */
+
+  --magpie: #C8C8C8;               /* PMS Cool Gray 2 */
+  --magpie-shade: #2D2D2D;         /* PMS 4279 */
+
+  --white: #FFFFFF;
+  --black: #000000;
+
+  /* ---- Extended neutrals (digital-only, derived) ----------
+     The guideline permits additional tints/shades for digital
+     experiences, light page backgrounds, tables and graphs.    */
+  --paper:      #F7F7F4;   /* warm off-white page background     */
+  --paper-blue: #F2F3F7;   /* faint blue-grey surface            */
+  --ink-60:     #4A4E63;   /* muted blue-grey text on light      */
+  --ink-40:     #8589A0;   /* secondary / meta text              */
+  --hairline:   #DDDEE6;   /* 1px borders, table rules           */
+  --hairline-strong: #C3C5D2;
+
+  /* ---- Semantic aliases ----------------------------------- */
+  --surface-page:    var(--paper);
+  --surface-card:    var(--white);
+  --surface-hero:    var(--heritage-blue);
+  --surface-sunken:  var(--paper-blue);
+
+  --text-strong:     var(--heritage-blue);  /* default copy + headings */
+  --text-body:       var(--ink-60);
+  --text-muted:      var(--ink-40);
+  --text-on-hero:    var(--white);
+
+  --border-subtle:   var(--hairline);
+  --border-strong:   var(--hairline-strong);
+  --border-hero:     var(--heritage-blue);
+
+  --accent:          var(--heritage-blue);
+  --accent-text:     var(--white);
+
+  /* Status colours mapped onto the palette (for PO tools:
+     backlog, sprint boards, trackers). Use sparingly.          */
+  --status-done:      var(--river-red-gum-shade);
+  --status-done-soft: var(--river-red-gum);
+  --status-progress:  var(--kookaburra-shade);
+  --status-progress-soft: var(--kookaburra);
+  --status-blocked:   var(--black-sheoak-shade);
+  --status-blocked-soft: var(--black-sheoak);
+  --status-todo:      var(--ink-40);
+  --status-todo-soft: var(--magpie);
+  --status-review:    var(--yam-daisy-shade);
+  --status-review-soft: var(--yam-daisy);
+}
