@@ -23,6 +23,7 @@
   <meta name="ext-resource-dependency" content="Quick Assessment (Standalone).html" data-resource-id="tool2">
   <meta name="ext-resource-dependency" content="Sprint Review Report (Standalone).html" data-resource-id="tool3">
   <meta name="ext-resource-dependency" content="Sprint Kick-off Report (Standalone).html" data-resource-id="tool4">
+  <meta name="ext-resource-dependency" content="Ready and Done Checker (Standalone).html" data-resource-id="tool5">
   <template id="__bundler_thumbnail" data-bg-color="#000F46">
     <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
       <rect width="1200" height="800" fill="#000F46"></rect>
@@ -89,6 +90,15 @@
           <span style="display:{{ navSubDisplay }}; font-size:12px; line-height:1.25; color:rgba(255,255,255,0.55);">Sprint goals &amp; plan</span>
         </span>
       </button>
+
+      <button type="button" onClick="{{ select5 }}" style="{{ nav5style }}" style-hover="background:rgba(255,255,255,0.06)">
+        <span style="width:3px; align-self:stretch; border-radius:2px; background:{{ accent }}; opacity:{{ bar5 }};"></span>
+        <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" style="flex:0 0 auto;"><rect x="3" y="5" width="6" height="6" rx="1"></rect><path d="m3 17 2 2 4-4"></path><path d="M13 6h8"></path><path d="M13 12h8"></path><path d="M13 18h8"></path></svg>
+        <span style="display:flex; flex-direction:column; gap:2px; text-align:left; min-width:0;">
+          <span style="font-size:15px; font-weight:600; line-height:1.2; color:#FFFFFF;">Ready &amp; Done Checker</span>
+          <span style="display:{{ navSubDisplay }}; font-size:12px; line-height:1.25; color:rgba(255,255,255,0.55);">DoR / DoD story gates</span>
+        </span>
+      </button>
     </nav>
 
     <div style="padding:16px 24px; border-top:1px solid rgba(255,255,255,0.12); font-size:11px; line-height:1.4; color:rgba(255,255,255,0.45);">
@@ -144,14 +154,15 @@ class Component extends DCLogic {
   constructor(props) {
     super(props);
     let saved = 0;
-    try { const v = parseInt(localStorage.getItem('agile-tools-active'), 10); if (v >= 0 && v <= 4) saved = v; } catch (e) {}
+    try { const v = parseInt(localStorage.getItem('agile-tools-active'), 10); if (v >= 0 && v <= 5) saved = v; } catch (e) {}
     this.state = { active: saved };
     this.tools = [
       { title: 'Initiative Roadmap', desc: 'A visual timeline of your product initiatives across quarters.', file: 'Initiative Roadmap (standalone).html' },
       { title: 'Prioritisation Template', desc: 'Score and rank initiatives on the full weighted matrix.', file: 'Prioritisation Template (Standalone).html' },
       { title: 'Quick Assessment', desc: 'Rapidly plot initiatives on effort versus value.', file: 'Quick Assessment (Standalone).html' },
       { title: 'Sprint Review Report', desc: 'A summary of what was delivered, demoed and learned this sprint.', file: 'Sprint Review Report (Standalone).html' },
-      { title: 'Sprint Kick-off Report', desc: 'Set the sprint goal, scope and plan at the start of the sprint.', file: 'Sprint Kick-off Report (Standalone).html' }
+      { title: 'Sprint Kick-off Report', desc: 'Set the sprint goal, scope and plan at the start of the sprint.', file: 'Sprint Kick-off Report (Standalone).html' },
+      { title: 'Ready & Done Checker', desc: 'Run a story through the Definition of Ready or Done before it starts or closes.', file: 'Ready and Done Checker (Standalone).html' }
     ];
   }
   select(i) {
@@ -174,13 +185,14 @@ class Component extends DCLogic {
       title: t.title,
       desc: t.desc,
       src: res || encodeURI(t.file),
-      nav0style: bg(0), nav1style: bg(1), nav2style: bg(2), nav3style: bg(3), nav4style: bg(4),
-      bar0: a === 0 ? 1 : 0, bar1: a === 1 ? 1 : 0, bar2: a === 2 ? 1 : 0, bar3: a === 3 ? 1 : 0, bar4: a === 4 ? 1 : 0,
+      nav0style: bg(0), nav1style: bg(1), nav2style: bg(2), nav3style: bg(3), nav4style: bg(4), nav5style: bg(5),
+      bar0: a === 0 ? 1 : 0, bar1: a === 1 ? 1 : 0, bar2: a === 2 ? 1 : 0, bar3: a === 3 ? 1 : 0, bar4: a === 4 ? 1 : 0, bar5: a === 5 ? 1 : 0,
       select0: () => this.select(0),
       select1: () => this.select(1),
       select2: () => this.select(2),
       select3: () => this.select(3),
-      select4: () => this.select(4)
+      select4: () => this.select(4),
+      select5: () => this.select(5)
     };
   }
 }

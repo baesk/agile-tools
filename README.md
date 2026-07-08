@@ -8,7 +8,7 @@ Give a Product Owner one place to plan, prioritise and report — from long-rang
 
 ## The workspace
 
-**`Agile Tools.dc.html`** — the shell. A Heritage-Blue sidebar that launches each tool in-frame, remembers the last tool you opened, and offers an "open full screen" link. Appearance is tweakable (accent colour, sidebar width, subtitles). The offline bundle `Agile Tools (offline).html` packages all five tools into one file.
+**`Agile Tools.dc.html`** — the shell. A Heritage-Blue sidebar that launches each tool in-frame, remembers the last tool you opened, and offers an "open full screen" link. Appearance is tweakable (accent colour, sidebar width, subtitles). The offline bundle `Agile Tools (offline).html` packages all six tools into one file.
 
 ## The tools
 
@@ -17,6 +17,7 @@ Give a Product Owner one place to plan, prioritise and report — from long-rang
 - **Quick Assessment** — rapidly plot initiatives on effort vs. value. For fast triage when the full matrix is overkill.
 - **Sprint Review Report** — a printable summary of what was delivered, demoed and learned in a sprint. Imports sprint data from CSV; issue keys link straight to Jira (`unimelb.atlassian.net/browse/…`).
 - **Sprint Kick-off Report** — set the sprint goal, scope and plan at the start of a sprint.
+- **Ready & Done Checker** — run a story through the squad's Definition of Ready before it starts and Definition of Done before it closes. Verdict banner flags the gaps, notes capture what's missing, and the completed check prints to PDF for the ticket.
 
 ## Files
 
