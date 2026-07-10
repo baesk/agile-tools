@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="_ds/university-of-melbourne-design-system-ba1c60e1-44aa-4acc-82aa-4515ae552e73/tokens/fonts.css">
+  <link rel="stylesheet" href="_ds/university-of-melbourne-design-system-ba1c60e1-44aa-4acc-82aa-4515ae552e73/tokens/colors.css">
+  <link rel="stylesheet" href="_ds/university-of-melbourne-design-system-ba1c60e1-44aa-4acc-82aa-4515ae552e73/tokens/typography.css">
+  <link rel="stylesheet" href="_ds/university-of-melbourne-design-system-ba1c60e1-44aa-4acc-82aa-4515ae552e73/tokens/spacing.css">
+  <link rel="stylesheet" href="_ds/university-of-melbourne-design-system-ba1c60e1-44aa-4acc-82aa-4515ae552e73/styles.css">
+  <script src="_ds/university-of-melbourne-design-system-ba1c60e1-44aa-4acc-82aa-4515ae552e73/_ds_bundle.js"></script>
+  <style>
+    html, body { margin: 0; background: var(--paper); }
+    a { color: #000F46; }
+    a:hover { color: #003C55; }
+    *::-webkit-scrollbar { width: 10px; height: 10px; }
+    *::-webkit-scrollbar-thumb { background: var(--hairline-strong); border-radius: 6px; }
+  </style>
+  <template id="__bundler_thumbnail" data-bg-color="#000F46">
+    <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+      <rect width="1200" height="800" fill="#000F46"></rect>
+      <rect x="380" y="280" width="280" height="40" rx="6" fill="#FFFFFF"></rect>
+      <rect x="470" y="380" width="330" height="40" rx="6" fill="#46C8F0"></rect>
+      <rect x="560" y="480" width="260" height="40" rx="6" fill="#ABC1A7"></rect>
+    </svg>
+  </template>
+</helmet>
+<div style="min-height:100vh; display:flex; flex-direction:column; background:var(--paper); font-family:var(--font-body);">
+
+  <header style="background:var(--heritage-blue); color:var(--white); padding:22px 28px; display:flex; align-items:flex-end; justify-content:space-between; gap:16px;">
+    <div style="display:flex; flex-direction:column; gap:6px;">
+      <h1 style="font-family:var(--font-display); font-weight:300; font-size:34px; line-height:1.04; margin:0; color:var(--white); font-variation-settings:'SOFT' 50,'WONK' 0,'opsz' 72;">{{ title }}</h1>
+    </div>
+  </header>
+
+  <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:16px 24px; padding:14px 28px; background:var(--white); border-bottom:1px solid var(--hairline);">
+    <div style="display:flex; align-items:center; gap:22px; flex-wrap:wrap;">
+      <div style="display:flex; align-items:center; gap:6px;">
+        <button onclick="{{ prevWindow }}" aria-label="Previous months" style="width:32px; height:32px; display:inline-flex; align-items:center; justify-content:center; border:1px solid var(--hairline-strong); background:var(--white); border-radius:var(--radius-sm); cursor:pointer; color:var(--heritage-blue);">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+        </button>
+        <span style="font-family:var(--font-body); font-weight:600; font-size:15px; color:var(--heritage-blue); min-width:148px; text-align:center;">{{ rangeLabel }}</span>
+        <button onclick="{{ nextWindow }}" aria-label="Next months" style="width:32px; height:32px; display:inline-flex; align-items:center; justify-content:center; border:1px solid var(--hairline-strong); background:var(--white); border-radius:var(--radius-sm); cursor:pointer; color:var(--heritage-blue);">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </button>
+      </div>
+      <div style="display:flex; align-items:center; gap:9px;">
+        <span style="font-family:var(--font-body); font-size:11px; font-weight:700; letter-spacing:0.07em; text-transform:uppercase; color:var(--ink-40);">Scale</span>
+        <div style="display:flex; border:1px solid var(--hairline-strong); border-radius:var(--radius-sm); overflow:hidden;">
+          <button onclick="{{ setRangeQuarter }}" style="{{ scaleStyles.quarter }}">3 months</button>
+          <button onclick="{{ setRangeHalf }}" style="{{ scaleStyles.half }}">6 months</button>
+          <button onclick="{{ setRangeNine }}" style="{{ scaleStyles.nine }}">9 months</button>
+          <button onclick="{{ setRangeYear }}" style="{{ scaleStyles.year }}">12 months</button>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex; align-items:center; gap:18px; flex-wrap:wrap;">
+      <div style="display:flex; align-items:center; gap:9px;">
+        <span style="font-family:var(--font-body); font-size:11px; font-weight:700; letter-spacing:0.07em; text-transform:uppercase; color:var(--ink-40);">Show</span>
+        <div style="display:flex; border:1px solid var(--hairline-strong); border-radius:var(--radius-sm); overflow:hidden;">
+          <button onclick="{{ filterAll }}" style="{{ filterStyles.all }}">All</button>
+          <button onclick="{{ filterInternal }}" style="{{ filterStyles.internal }}">Internal</button>
+          <button onclick="{{ filterVendor }}" style="{{ filterStyles.vendor }}">Vendor</button>
+          <button onclick="{{ filterMaintenance }}" style="{{ filterStyles.maintenance }}">Maintenance</button>
+        </div>
+      </div>
+      <div style="display:flex; align-items:center; gap:10px;">
+        <input type="file" accept="application/json" ref="{{ fileRef }}" onchange="{{ onImportFile }}" style="display:none;">
+        <x-import component-from-global-scope="UniversityOfMelbourneDesignSystem_ba1c60.Button" variant="primary" size="sm" on-click="{{ openAdd }}" hint-size="auto,36px">Add item</x-import>
+        <x-import component-from-global-scope="UniversityOfMelbourneDesignSystem_ba1c60.Button" variant="secondary" size="sm" on-click="{{ importClick }}" hint-size="auto,36px">Import</x-import>
+        <x-import component-from-global-scope="UniversityOfMelbourneDesignSystem_ba1c60.Button" variant="secondary" size="sm" on-click="{{ exportData }}" hint-size="auto,36px">Export</x-import>
+      </div>
+    </div>
+  </div>
+
+  <div style="display:flex; flex-wrap:wrap; align-items:center; gap:18px; padding:9px 28px; background:var(--paper); border-bottom:1px solid var(--hairline); font-family:var(--font-body); font-size:12px; color:var(--ink-60);">
+    <div style="display:flex; align-items:center; gap:7px;"><span style="width:26px; height:11px; background:var(--heritage-blue); border-radius:2px; display:inline-block;"></span>Internal initiative</div>
+    <div style="display:flex; align-items:center; gap:7px;"><span style="width:26px; height:11px; background:var(--greenstone); border:1px solid var(--greenstone-shade); box-sizing:border-box; border-radius:2px; display:inline-block;"></span>Maintenance window</div>
+    <div style="display:flex; align-items:center; gap:7px;"><span style="{{ legendVendorBandStyle }}"></span>Vendor item</div>
+    <div style="display:flex; align-items:center; gap:7px;"><span style="width:0; height:14px; border-left:2px dashed var(--black-sheoak); display:inline-block;"></span>Today</div>
+    <div style="flex:1; min-width:12px;"></div>
+    <div style="display:flex; align-items:center; gap:7px; flex-wrap:wrap;">
+      <span style="font-weight:700; color:var(--ink-40); font-size:11px; letter-spacing:0.05em; text-transform:uppercase;">State</span>
+      <span style="{{ stateChips.new }}">New</span>
+      <span style="{{ stateChips.analysing }}">Analysing</span>
+      <span style="{{ stateChips.development }}">Development</span>
+      <span style="{{ stateChips.uat }}">UAT</span>
+      <span style="{{ stateChips.complete }}">Complete</span>
+    </div>
+  </div>
+
+  <div style="flex:1; overflow:auto; padding:24px 28px 40px;">
+    <div style="background:var(--white); border:1px solid var(--hairline); border-radius:var(--radius-md); border-top:3px solid var(--heritage-blue); overflow:hidden;">
+
+      <div style="display:flex; border-bottom:1px solid var(--hairline); background:var(--paper-blue);">
+        <div style="width:368px; min-width:368px; box-sizing:border-box; padding:11px 16px; border-right:1px solid var(--hairline); display:flex; align-items:flex-end;">
+          <span style="font-family:var(--font-body); font-weight:700; font-size:11px; letter-spacing:0.08em; text-transform:uppercase; color:var(--ink-40);">Initiative · vendor item · maintenance</span>
+        </div>
+        <div style="flex:1; display:flex; position:relative;">
+          <sc-for list="{{ columns }}" as="col" hint-placeholder-count="6">
+            <div style="{{ col.headStyle }}">
+              <span style="font-family:var(--font-body); font-weight:600; font-size:13px; color:var(--heritage-blue); line-height:1.1;">{{ col.label }}</span>
+              <span style="font-family:var(--font-body); font-weight:600; font-size:11px; color:var(--ink-40);">{{ col.sub }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+
+      <sc-if value="{{ hasRows }}" hint-placeholder-val="{{ true }}">
+        <div style="display:flex;">
+          <div style="width:368px; min-width:368px;">
+            <sc-for list="{{ rows }}" as="row" hint-placeholder-count="6">
+              <div onclick="{{ row.onEdit }}" style="height:62px; box-sizing:border-box; border-bottom:1px solid var(--hairline); border-right:1px solid var(--hairline); padding:5px 16px; display:flex; flex-direction:column; justify-content:center; gap:3px; cursor:pointer; background:var(--white);">
+                <span style="font-family:var(--font-body); font-weight:600; font-size:14px; color:var(--heritage-blue); line-height:1.15; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ row.name }}</span>
+                <div style="display:flex; align-items:center; gap:8px;">
+                  <span style="{{ row.stateStyle }}">{{ row.stateLabel }}</span>
+                  <span style="font-family:var(--font-body); font-size:12px; color:var(--ink-40); white-space:nowrap;">{{ row.dateLabel }}</span>
+                  <sc-if value="{{ row.hasJira }}" hint-placeholder-val="{{ true }}">
+                    <a href="{{ row.jiraHref }}" target="_blank" rel="noopener" onclick="{{ row.onJiraClick }}" style="display:inline-flex; align-items:center; gap:3px; font-family:var(--font-body); font-size:12px; font-weight:600; color:var(--heritage-blue); text-decoration:none; white-space:nowrap;">{{ row.jiraKey }}<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg></a>
+                  </sc-if>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+          <div style="flex:1; position:relative;">
+            <div style="position:absolute; inset:0; display:flex; pointer-events:none;">
+              <sc-for list="{{ columns }}" as="col" hint-placeholder-count="6">
+                <div style="{{ col.gridStyle }}"></div>
+              </sc-for>
+            </div>
+            <sc-if value="{{ showToday }}" hint-placeholder-val="{{ true }}">
+              <div style="{{ todayStyle }}"></div>
+              <div style="{{ todayLabelStyle }}">Today</div>
+            </sc-if>
+            <sc-for list="{{ rows }}" as="row" hint-placeholder-count="6">
+              <div style="height:62px; box-sizing:border-box; border-bottom:1px solid var(--hairline); position:relative;">
+                <sc-if value="{{ row.barStyle }}" hint-placeholder-val="{{ true }}">
+                  <div onclick="{{ row.onEdit }}" title="{{ row.titleText }}" style="{{ row.barStyle }}">{{ row.barText }}</div>
+                </sc-if>
+                <sc-if value="{{ row.markerStyle }}" hint-placeholder-val="{{ true }}">
+                  <div onclick="{{ row.onEdit }}" title="{{ row.titleText }}" style="{{ row.markerStyle }}"><div style="{{ diamondStyle }}"></div></div>
+                </sc-if>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+      <sc-if value="{{ noRows }}" hint-placeholder-val="{{ false }}">
+        <div style="padding:54px 24px; text-align:center; font-family:var(--font-body); color:var(--ink-40); font-size:15px;">No items match this view. Use <strong style="color:var(--heritage-blue);">Add item</strong> to create one.</div>
+      </sc-if>
+
+    </div>
+  </div>
+
+  <sc-if value="{{ formOpen }}" hint-placeholder-val="{{ false }}">
+    <div onclick="{{ closeForm }}" style="position:fixed; inset:0; background:rgba(0,15,70,0.45); display:flex; align-items:center; justify-content:center; padding:24px; z-index:50;">
+      <div onclick="{{ stopPanel }}" style="background:var(--white); width:470px; max-width:92vw; border-radius:var(--radius-md); border-top:3px solid var(--heritage-blue); box-shadow:0 24px 60px rgba(0,15,70,0.28); box-sizing:border-box; padding:26px 28px; max-height:90vh; overflow:auto;">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:20px;">
+          <h2 style="font-family:var(--font-display); font-weight:300; font-size:26px; color:var(--heritage-blue); margin:0; font-variation-settings:'SOFT' 50,'WONK' 0,'opsz' 72;">{{ formTitle }}</h2>
+          <button onclick="{{ closeForm }}" aria-label="Close" style="width:32px; height:32px; display:inline-flex; align-items:center; justify-content:center; border:none; background:transparent; cursor:pointer; color:var(--ink-40); border-radius:var(--radius-sm);">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          </button>
+        </div>
+
+        <div style="display:flex; flex-direction:column; gap:16px;">
+          <div>
+            <label style="font-family:var(--font-body); font-weight:600; font-size:13px; color:var(--heritage-blue); margin-bottom:7px; display:block;">Type</label>
+            <div style="display:flex; border:1px solid var(--hairline-strong); border-radius:var(--radius-sm); overflow:hidden; width:100%;">
+              <button onclick="{{ setTypeInitiative }}" style="{{ typeStyles.initiative }}">Internal initiative</button>
+              <button onclick="{{ setTypeVendor }}" style="{{ typeStyles.vendor }}">Vendor item</button>
+              <button onclick="{{ setTypeMaintenance }}" style="{{ typeStyles.maintenance }}">Maintenance</button>
+            </div>
+          </div>
+
+          <div>
+            <label style="font-family:var(--font-body); font-weight:600; font-size:13px; color:var(--heritage-blue); margin-bottom:7px; display:block;">Name</label>
+            <input type="text" value="{{ form.name }}" onchange="{{ onName }}" oninput="{{ onName }}" placeholder="e.g. Student enrolment redesign" style="width:100%; box-sizing:border-box; border:1.5px solid var(--hairline-strong); border-radius:var(--radius-sm); padding:10px 12px; font-family:var(--font-body); font-size:15px; color:var(--heritage-blue); background:var(--white); outline:none;">
+          </div>
+
+          <div>
+            <label style="font-family:var(--font-body); font-weight:600; font-size:13px; color:var(--heritage-blue); margin-bottom:7px; display:block;">Jira ticket key</label>
+            <input type="text" value="{{ form.jira }}" onchange="{{ onJira }}" oninput="{{ onJira }}" placeholder="e.g. SP-1042" style="width:100%; box-sizing:border-box; border:1.5px solid var(--hairline-strong); border-radius:var(--radius-sm); padding:10px 12px; font-family:var(--font-body); font-size:15px; color:var(--heritage-blue); background:var(--white); outline:none;">
+          </div>
+
+          <div>
+            <label style="font-family:var(--font-body); font-weight:600; font-size:13px; color:var(--heritage-blue); margin-bottom:7px; display:block;">State</label>
+            <select value="{{ form.state }}" onchange="{{ onState }}" style="width:100%; box-sizing:border-box; border:1.5px solid var(--hairline-strong); border-radius:var(--radius-sm); padding:10px 12px; font-family:var(--font-body); font-size:15px; color:var(--heritage-blue); background:var(--white); outline:none; cursor:pointer;">
+              <option value="new">New</option>
+              <option value="analysing">Analysing</option>
+              <option value="development">Development</option>
+              <option value="uat">UAT</option>
+              <option value="complete">Complete</option>
+            </select>
+          </div>
+
+          <div style="display:flex; gap:14px;">
+            <div style="flex:1;">
+              <label style="font-family:var(--font-body); font-weight:600; font-size:13px; color:var(--heritage-blue); margin-bottom:7px; display:block;">{{ startLabel }}</label>
+              <input type="date" value="{{ form.start }}" onchange="{{ onStart }}" style="width:100%; box-sizing:border-box; border:1.5px solid var(--hairline-strong); border-radius:var(--radius-sm); padding:9px 12px; font-family:var(--font-body); font-size:15px; color:var(--heritage-blue); background:var(--white); outline:none;">
+            </div>
+            <div style="flex:1;">
+              <label style="font-family:var(--font-body); font-weight:600; font-size:13px; color:var(--heritage-blue); margin-bottom:7px; display:block;">{{ endLabel }}</label>
+              <input type="date" value="{{ form.end }}" onchange="{{ onEnd }}" style="width:100%; box-sizing:border-box; border:1.5px solid var(--hairline-strong); border-radius:var(--radius-sm); padding:9px 12px; font-family:var(--font-body); font-size:15px; color:var(--heritage-blue); background:var(--white); outline:none;">
+            </div>
+          </div>
+          <sc-if value="{{ formIsVendor }}" hint-placeholder-val="{{ false }}">
+            <p style="margin:0; font-family:var(--font-body); font-size:12.5px; color:var(--ink-40); line-height:1.4;">Vendor items appear as a milestone marker at the release date. Add an end date to show a longer update or hypercare window as a band on the timeline.</p>
+          </sc-if>
+
+          <div>
+            <label style="font-family:var(--font-body); font-weight:600; font-size:13px; color:var(--heritage-blue); margin-bottom:7px; display:block;">Notes</label>
+            <textarea value="{{ form.notes }}" onchange="{{ onNotes }}" oninput="{{ onNotes }}" rows="3" placeholder="Short notes — context, dependencies, links…" style="width:100%; box-sizing:border-box; border:1.5px solid var(--hairline-strong); border-radius:var(--radius-sm); padding:10px 12px; font-family:var(--font-body); font-size:15px; color:var(--heritage-blue); background:var(--white); outline:none; resize:vertical; min-height:70px; line-height:1.45;"></textarea>
+          </div>
+        </div>
+
+        <div style="display:flex; align-items:center; gap:10px; margin-top:24px;">
+          <sc-if value="{{ isEditing }}" hint-placeholder-val="{{ false }}">
+            <x-import component-from-global-scope="UniversityOfMelbourneDesignSystem_ba1c60.Button" variant="secondary" size="sm" style="{{ deleteStyle }}" on-click="{{ deleteItem }}" hint-size="auto,36px">Delete</x-import>
+          </sc-if>
+          <div style="flex:1;"></div>
+          <x-import component-from-global-scope="UniversityOfMelbourneDesignSystem_ba1c60.Button" variant="ghost" size="sm" on-click="{{ closeForm }}" hint-size="auto,36px">Cancel</x-import>
+          <x-import component-from-global-scope="UniversityOfMelbourneDesignSystem_ba1c60.Button" variant="primary" size="sm" disabled="{{ saveDisabled }}" on-click="{{ saveForm }}" hint-size="auto,36px">Save item</x-import>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;$preview&quot;: { &quot;width&quot;: &quot;100%&quot;, &quot;height&quot;: &quot;100%&quot; },
+  &quot;title&quot;: { &quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;Initiative Roadmap&quot;, &quot;tsType&quot;: &quot;string&quot; },
+  &quot;jiraBaseUrl&quot;: { &quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;https://unimelb.atlassian.net/browse/&quot;, &quot;tsType&quot;: &quot;string&quot; },
+  &quot;vendorAccent&quot;: { &quot;editor&quot;: &quot;enum&quot;, &quot;default&quot;: &quot;Kookaburra&quot;, &quot;options&quot;: [&quot;Kookaburra&quot;, &quot;Yam daisy&quot;, &quot;Possum&quot;, &quot;Greenstone&quot;], &quot;tsType&quot;: &quot;string&quot; }
+}">
+class Component extends DCLogic {
+  DAY = 86400000;
+  MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+  STATES = {
+    new:         { label: 'New',         bg: '#EEEEEE',  fg: 'var(--magpie-shade)',        border: '1px solid #DADADA' },
+    analysing:   { label: 'Analysing',   bg: '#DDF3FB',  fg: 'var(--kookaburra-shade)',    border: '1px solid #B9E6F6' },
+    development: { label: 'Development', bg: '#FFF3CC',  fg: 'var(--yam-daisy-shade)',     border: '1px solid #F6E39A' },
+    uat:         { label: 'UAT',         bg: '#F7DEEE',  fg: 'var(--possum-shade)',        border: '1px solid #EFC2DD' },
+    complete:    { label: 'Complete',    bg: '#EAF0DC',  fg: 'var(--river-red-gum-shade)', border: '1px solid #D4E0B4' }
+  };
+
+  VENDOR_ACCENTS = {
+    'Kookaburra': { fill: 'var(--kookaburra)', shade: 'var(--kookaburra-shade)' },
+    'Yam daisy':  { fill: 'var(--yam-daisy)',  shade: 'var(--yam-daisy-shade)' },
+    'Possum':     { fill: 'var(--possum)',     shade: 'var(--possum-shade)' },
+    'Greenstone': { fill: 'var(--greenstone)', shade: 'var(--greenstone-shade)' }
+  };
+
+  SEED = [
+    { id: 'it-1', name: 'Student enrolment redesign',   type: 'initiative', jira: 'SP-1042', state: 'development', start: '2026-05-12', end: '2026-07-18' },
+    { id: 'it-2', name: 'Single sign-on migration',     type: 'initiative', jira: 'SP-1108', state: 'uat',         start: '2026-06-02', end: '2026-07-04' },
+    { id: 'it-3', name: 'Accessibility audit remediation', type: 'initiative', jira: 'SP-0980', state: 'complete', start: '2026-05-05', end: '2026-06-13' },
+    { id: 'it-4', name: 'Timetable API rebuild',        type: 'initiative', jira: 'SP-1156', state: 'analysing',   start: '2026-07-01', end: '2026-09-15' },
+    { id: 'it-5', name: 'Results notification service', type: 'initiative', jira: 'SP-1190', state: 'new',         start: '2026-08-10', end: '2026-10-02' },
+    { id: 'it-6', name: 'Mobile app refresh',           type: 'initiative', jira: 'SP-1203', state: 'new',         start: '2026-09-01', end: '2026-10-28' },
+    { id: 'it-7', name: 'Workday HCM 2026R1',           type: 'vendor', jira: 'VND-301', state: 'uat',         start: '2026-06-19', end: '2026-06-30' },
+    { id: 'it-8', name: 'Canvas LMS quarterly update',  type: 'vendor', jira: 'VND-318', state: 'development', start: '2026-07-31', end: null },
+    { id: 'it-9', name: 'ServiceNow Vancouver upgrade', type: 'vendor', jira: 'VND-326', state: 'analysing',   start: '2026-09-04', end: '2026-09-18' },
+    { id: 'it-10', name: 'Microsoft Copilot rollout',   type: 'vendor', jira: 'VND-340', state: 'new',         start: '2026-10-15', end: null },
+    { id: 'it-11', name: 'Database patching window',    type: 'maintenance', jira: '', state: 'new',           start: '2026-07-20', end: '2026-07-24' },
+    { id: 'it-12', name: 'Network infrastructure upgrade', type: 'maintenance', jira: '', state: 'analysing',  start: '2026-08-24', end: '2026-09-04' }
+  ];
+
+  state = { items: this.SEED, scale: 'half', filter: 'all', windowStart: '2026-05-01', formOpen: false, form: null };
+
+  constructor(props) {
+    super(props);
+    this.fileRef = React.createRef();
+  }
+
+  componentDidMount() {
+    try {
+      const raw = localStorage.getItem('um-roadmap-v1');
+      if (raw) { const d = JSON.parse(raw); if (Array.isArray(d) && d.length) this.setState({ items: d }); }
+    } catch (e) {}
+  }
+
+  isoToNum = (iso) => new Date(iso + 'T00:00:00').getTime();
+  numToISO = (n) => { const d = new Date(n); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); };
+  addMonthsISO = (iso, n) => { const d = new Date(iso + 'T00:00:00'); d.setMonth(d.getMonth() + n); return this.numToISO(d.getTime()); };
+  fmtDay = (iso) => { const d = new Date(iso + 'T00:00:00'); return d.getDate() + ' ' + this.MONTHS[d.getMonth()]; };
+  todayNum = () => this.isoToNum(this.numToISO(Date.now()));
+
+  persist = (items) => { try { localStorage.setItem('um-roadmap-v1', JSON.stringify(items)); } catch (e) {} };
+
+  chipStyle = (st) => ({ display: 'inline-flex', alignItems: 'center', background: st.bg, color: st.fg, border: st.border, padding: '3px 9px', borderRadius: '999px', fontSize: '11.5px', fontWeight: 600, fontFamily: 'var(--font-body)', lineHeight: 1.1, whiteSpace: 'nowrap' });
+
+  seg = (active) => ({ border: 'none', padding: '7px 15px', fontSize: '13px', fontWeight: 600, fontFamily: 'var(--font-body)', cursor: 'pointer', lineHeight: 1.1, whiteSpace: 'nowrap', background: active ? 'var(--heritage-blue)' : 'var(--white)', color: active ? 'var(--white)' : 'var(--ink-60)' });
+
+  // --- handlers ---
+  prevWindow = () => this.setState(s => ({ windowStart: this.addMonthsISO(s.windowStart, -1) }));
+  nextWindow = () => this.setState(s => ({ windowStart: this.addMonthsISO(s.windowStart, 1) }));
+  setRangeHalf = () => this.setState({ scale: 'half' });
+  setRangeQuarter = () => this.setState({ scale: 'quarter' });
+  setRangeNine = () => this.setState({ scale: 'nine' });
+  setRangeYear = () => this.setState({ scale: 'year' });
+  filterAll = () => this.setState({ filter: 'all' });
+  filterInternal = () => this.setState({ filter: 'internal' });
+  filterVendor = () => this.setState({ filter: 'vendor' });
+  filterMaintenance = () => this.setState({ filter: 'maintenance' });
+
+  openAdd = () => {
+    const today = this.numToISO(this.todayNum());
+    this.setState({ formOpen: true, form: { id: null, type: 'initiative', name: '', jira: '', state: 'new', start: today, end: this.numToISO(this.todayNum() + 21 * this.DAY), notes: '' } });
+  };
+  openEdit = (id) => { const it = this.state.items.find(x => x.id === id); if (!it) return; this.setState({ formOpen: true, form: Object.assign({}, it, { end: it.end || '', notes: it.notes || '' }) }); };
+  closeForm = () => this.setState({ formOpen: false, form: null });
+  stopPanel = (e) => e.stopPropagation();
+  setField = (k, v) => this.setState(s => ({ form: Object.assign({}, s.form, { [k]: v }) }));
+  setTypeInitiative = () => this.setField('type', 'initiative');
+  setTypeVendor = () => this.setField('type', 'vendor');
+  setTypeMaintenance = () => this.setField('type', 'maintenance');
+  onName = (e) => this.setField('name', e.target.value);
+  onJira = (e) => this.setField('jira', e.target.value);
+  onState = (e) => this.setField('state', e.target.value);
+  onStart = (e) => this.setField('start', e.target.value);
+  onEnd = (e) => this.setField('end', e.target.value);
+  onNotes = (e) => this.setField('notes', e.target.value);
+
+  saveForm = () => {
+    const f = this.state.form;
+    if (!f || !f.name || !f.name.trim()) return;
+    let end;
+    if (f.type === 'vendor') {
+      end = (f.end && f.end > f.start) ? f.end : null;
+    } else {
+      end = f.end || f.start;
+    }
+    const clean = { id: f.id || ('it-' + Date.now()), name: f.name.trim(), type: f.type, jira: (f.jira || '').trim(), state: f.state, start: f.start, end, notes: (f.notes || '').trim() };
+    let items = this.state.items.slice();
+    if (f.id) items = items.map(x => x.id === f.id ? clean : x); else items.push(clean);
+    this.persist(items);
+    this.setState({ items, formOpen: false, form: null });
+  };
+  deleteItem = () => {
+    const f = this.state.form; if (!f || !f.id) return;
+    const items = this.state.items.filter(x => x.id !== f.id);
+    this.persist(items);
+    this.setState({ items, formOpen: false, form: null });
+  };
+  exportData = () => {
+    const blob = new Blob([JSON.stringify(this.state.items, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'roadmap-' + this.numToISO(this.todayNum()) + '.json';
+    document.body.appendChild(a); a.click(); a.remove();
+    URL.revokeObjectURL(url);
+  };
+  importClick = () => { if (this.fileRef.current) this.fileRef.current.click(); };
+  onImportFile = (e) => {
+    const file = e.target.files && e.target.files[0]; if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => { try { const data = JSON.parse(reader.result); if (Array.isArray(data)) { this.persist(data); this.setState({ items: data }); } } catch (err) { console.warn('Import failed', err); } };
+    reader.readAsText(file);
+    e.target.value = '';
+  };
+
+  renderVals() {
+    const { items, scale, filter, windowStart, formOpen, form } = this.state;
+    const title = this.props.title ?? 'Initiative Roadmap';
+    const jiraBase = this.props.jiraBaseUrl ?? 'https://unimelb.atlassian.net/browse/';
+    const accent = this.VENDOR_ACCENTS[this.props.vendorAccent] ?? this.VENDOR_ACCENTS['Kookaburra'];
+    const windowMonths = scale === 'quarter' ? 3 : scale === 'nine' ? 9 : scale === 'year' ? 12 : 6;
+
+    const startNum = this.isoToNum(windowStart);
+    const endNum = this.isoToNum(this.addMonthsISO(windowStart, windowMonths));
+    const span = endNum - startNum;
+    const pct = (iso) => ((this.isoToNum(iso) - startNum) / span) * 100;
+
+    const columns = [];
+    const headBase = { flexBasis: 0, minWidth: 0, boxSizing: 'border-box', borderRight: '1px solid var(--hairline)', padding: '9px 10px', display: 'flex', flexDirection: 'column', gap: '1px', overflow: 'hidden' };
+    for (let i = 0; i < windowMonths; i++) {
+      const cs = this.addMonthsISO(windowStart, i);
+      const ce = this.addMonthsISO(windowStart, i + 1);
+      const days = (this.isoToNum(ce) - this.isoToNum(cs)) / this.DAY;
+      const d = new Date(cs + 'T00:00:00');
+      columns.push({ key: cs, label: this.MONTHS[d.getMonth()], sub: (i === 0 || d.getMonth() === 0) ? String(d.getFullYear()) : '', headStyle: Object.assign({ flexGrow: days }, headBase), gridStyle: { flexGrow: days, flexBasis: 0, minWidth: 0, borderRight: '1px solid var(--hairline)', boxSizing: 'border-box' } });
+    }
+
+    const barBase = { position: 'absolute', top: '17px', height: '28px', background: 'var(--heritage-blue)', borderRadius: '3px', display: 'flex', alignItems: 'center', padding: '0 10px', color: 'var(--white)', fontSize: '12.5px', fontWeight: 600, fontFamily: 'var(--font-body)', cursor: 'pointer', overflow: 'hidden', whiteSpace: 'nowrap', boxShadow: '0 1px 2px rgba(0,15,70,0.25)', zIndex: 3, boxSizing: 'border-box' };
+
+    const clampBar = (sISO, eISO) => {
+      let l = pct(sISO), r = pct(eISO);
+      if (r <= 0 || l >= 100) return null;
+      l = Math.max(0, Math.min(100, l));
+      r = Math.max(0, Math.min(100, r));
+      return { left: l + '%', width: Math.max(r - l, 1.4) + '%' };
+    };
+
+    const order = filter === 'all' ? items : items.filter(it => {
+      if (filter === 'internal') return it.type === 'initiative';
+      if (filter === 'vendor') return it.type === 'vendor';
+      return it.type === 'maintenance';
+    });
+    const sorted = order.slice().sort((a, b) => this.isoToNum(a.start) - this.isoToNum(b.start));
+    const rows = sorted.map(it => {
+      const isVendor = it.type === 'vendor';
+      const isMaint = it.type === 'maintenance';
+      const st = this.STATES[it.state] || this.STATES.new;
+      let barStyle = null, markerStyle = null, dateLabel = '', barText = '';
+      if (isVendor) {
+        const hasRange = !!(it.end && it.end > it.start);
+        dateLabel = hasRange ? ('Release ' + this.fmtDay(it.start) + ' \u2013 ' + this.fmtDay(it.end)) : ('Release ' + this.fmtDay(it.start));
+        if (hasRange) {
+          const geom = clampBar(it.start, it.end);
+          if (geom) {
+            barStyle = Object.assign({}, barBase, geom, { background: accent.fill, color: 'var(--heritage-blue)', border: '1px solid ' + accent.shade, boxShadow: 'none' });
+            barText = it.name;
+          }
+        } else {
+          const p = pct(it.start);
+          if (p >= 0 && p <= 100) markerStyle = { position: 'absolute', top: 0, bottom: 0, left: p + '%', transform: 'translateX(-50%)', display: 'flex', alignItems: 'center', cursor: 'pointer', zIndex: 4 };
+        }
+      } else {
+        const endISO = it.end || it.start;
+        dateLabel = this.fmtDay(it.start) + ' \u2013 ' + this.fmtDay(endISO);
+        const geom = clampBar(it.start, endISO);
+        if (geom) {
+          barStyle = Object.assign({}, barBase, geom);
+          barText = it.name;
+          if (isMaint) Object.assign(barStyle, { background: 'var(--greenstone)', color: 'var(--heritage-blue)', border: '1px solid var(--greenstone-shade)', boxShadow: 'none' });
+        }
+      }
+      const typeWord = isVendor ? 'Vendor' : (isMaint ? 'Maintenance' : 'Initiative');
+      return {
+        id: it.id, name: it.name, isVendor,
+        jiraKey: it.jira, hasJira: !!(it.jira && it.jira.trim()), jiraHref: jiraBase + encodeURIComponent((it.jira || '').trim()),
+        stateLabel: st.label, stateStyle: this.chipStyle(st),
+        dateLabel,
+        barStyle, markerStyle, barText,
+        titleText: it.name + ' \u00b7 ' + typeWord + ' \u00b7 ' + st.label + ' \u00b7 ' + dateLabel + (it.jira ? ' \u00b7 ' + it.jira : '') + (it.notes ? '\n' + it.notes : ''),
+        onEdit: () => this.openEdit(it.id),
+        onJiraClick: (e) => e.stopPropagation()
+      };
+    });
+
+    const tp = ((this.todayNum() - startNum) / span) * 100;
+    const showToday = tp >= 0 && tp <= 100;
+    const todayStyle = showToday ? { position: 'absolute', top: 0, bottom: 0, left: tp + '%', width: 0, borderLeft: '2px dashed var(--black-sheoak)', zIndex: 6, pointerEvents: 'none' } : null;
+    const todayLabelStyle = showToday ? { position: 'absolute', top: '2px', left: tp + '%', transform: 'translateX(-50%)', background: 'var(--black-sheoak)', color: 'var(--white)', fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: '9px', letterSpacing: '0.04em', textTransform: 'uppercase', padding: '2px 5px', borderRadius: '2px', zIndex: 7, pointerEvents: 'none', whiteSpace: 'nowrap' } : null;
+
+    const sD = new Date(windowStart + 'T00:00:00');
+    const lD = new Date(this.addMonthsISO(windowStart, windowMonths - 1) + 'T00:00:00');
+    const rangeLabel = sD.getFullYear() === lD.getFullYear()
+      ? this.MONTHS[sD.getMonth()] + ' \u2013 ' + this.MONTHS[lD.getMonth()] + ' ' + lD.getFullYear()
+      : this.MONTHS[sD.getMonth()] + ' ' + sD.getFullYear() + ' \u2013 ' + this.MONTHS[lD.getMonth()] + ' ' + lD.getFullYear();
+
+    const fType = form ? form.type : 'initiative';
+    const fIsVendor = fType === 'vendor';
+
+    return {
+      title,
+      columns,
+      hasRows: rows.length > 0,
+      noRows: rows.length === 0,
+      rows,
+      showToday, todayStyle, todayLabelStyle,
+      diamondStyle: { width: '16px', height: '16px', background: accent.fill, border: '2px solid ' + accent.shade, transform: 'rotate(45deg)' },
+      legendDiamondStyle: { width: '12px', height: '12px', background: accent.fill, border: '1.5px solid ' + accent.shade, transform: 'rotate(45deg)', display: 'inline-block', marginLeft: '4px' },
+      legendVendorBandStyle: { width: '26px', height: '11px', background: accent.fill, border: '1px solid ' + accent.shade, boxSizing: 'border-box', borderRadius: '2px', display: 'inline-block' },
+      stateChips: {
+        new: this.chipStyle(this.STATES.new),
+        analysing: this.chipStyle(this.STATES.analysing),
+        development: this.chipStyle(this.STATES.development),
+        uat: this.chipStyle(this.STATES.uat),
+        complete: this.chipStyle(this.STATES.complete)
+      },
+      rangeLabel,
+      scaleStyles: { quarter: this.seg(windowMonths === 3), half: this.seg(windowMonths === 6), nine: this.seg(windowMonths === 9), year: this.seg(windowMonths === 12) },
+      filterStyles: { all: this.seg(filter === 'all'), internal: this.seg(filter === 'internal'), vendor: this.seg(filter === 'vendor'), maintenance: this.seg(filter === 'maintenance') },
+      typeStyles: {
+        initiative: Object.assign(this.seg(fType === 'initiative'), { flex: 1 }),
+        vendor: Object.assign(this.seg(fIsVendor), { flex: 1 }),
+        maintenance: Object.assign(this.seg(fType === 'maintenance'), { flex: 1 })
+      },
+      fileRef: this.fileRef,
+      form, formOpen,
+      formTitle: form && form.id ? 'Edit item' : 'Add item',
+      formIsVendor: !!(form && fIsVendor),
+      startLabel: fIsVendor ? 'Release date' : 'Start date',
+      endLabel: fIsVendor ? 'End date (optional)' : 'End date',
+      isEditing: !!(form && form.id),
+      saveDisabled: !(form && form.name && form.name.trim()),
+      deleteStyle: { color: 'var(--black-sheoak-shade)', borderColor: 'var(--black-sheoak-shade)' },
+      prevWindow: this.prevWindow, nextWindow: this.nextWindow,
+      setRangeQuarter: this.setRangeQuarter, setRangeHalf: this.setRangeHalf, setRangeNine: this.setRangeNine, setRangeYear: this.setRangeYear,
+      filterAll: this.filterAll, filterInternal: this.filterInternal, filterVendor: this.filterVendor, filterMaintenance: this.filterMaintenance,
+      openAdd: this.openAdd, exportData: this.exportData, importClick: this.importClick, onImportFile: this.onImportFile,
+      closeForm: this.closeForm, stopPanel: this.stopPanel, saveForm: this.saveForm, deleteItem: this.deleteItem,
+      setTypeInitiative: this.setTypeInitiative, setTypeVendor: this.setTypeVendor, setTypeMaintenance: this.setTypeMaintenance,
+      onName: this.onName, onJira: this.onJira, onState: this.onState, onStart: this.onStart, onEnd: this.onEnd, onNotes: this.onNotes
+    };
+  }
+}
+</script>
+</body>
+</html>
