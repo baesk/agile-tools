@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+
+<helmet>
+<link rel="stylesheet" href="_ds/university-of-melbourne-design-system-ba1c60e1-44aa-4acc-82aa-4515ae552e73/tokens/fonts.css">
+<link rel="stylesheet" href="_ds/university-of-melbourne-design-system-ba1c60e1-44aa-4acc-82aa-4515ae552e73/tokens/colors.css">
+<link rel="stylesheet" href="_ds/university-of-melbourne-design-system-ba1c60e1-44aa-4acc-82aa-4515ae552e73/tokens/typography.css">
+<link rel="stylesheet" href="_ds/university-of-melbourne-design-system-ba1c60e1-44aa-4acc-82aa-4515ae552e73/tokens/spacing.css">
+<link rel="stylesheet" href="_ds/university-of-melbourne-design-system-ba1c60e1-44aa-4acc-82aa-4515ae552e73/styles.css">
+
+<script src="_ds/university-of-melbourne-design-system-ba1c60e1-44aa-4acc-82aa-4515ae552e73/_ds_bundle.js"></script>
+<style>
+  @media print {
+    @page { size: A4; margin: 0; }
+    body { background: #fff !important; }
+    [data-screen-only] { display: none !important; }
+    .kickoff-sheet { box-shadow: none !important; }
+  }
+  [data-field]:focus { outline: 2px solid rgba(0,15,70,0.35); outline-offset: 2px; border-radius: 2px; }
+  [data-field]:hover { background: rgba(0,15,70,0.04); border-radius: 2px; }
+  [data-field][data-placeholder]:empty:before { content: attr(data-placeholder); color: #9AA0B4; font-weight: 300; }
+</style>
+<template id="__bundler_thumbnail" data-bg-color="#000F46">
+  <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+    <rect width="1200" height="800" fill="#000F46"></rect>
+    <rect x="360" y="240" width="480" height="52" rx="6" fill="#FFFFFF"></rect>
+    <rect x="360" y="340" width="220" height="120" rx="6" fill="#46C8F0"></rect>
+    <rect x="620" y="340" width="220" height="120" rx="6" fill="#9FB825"></rect>
+    <rect x="360" y="500" width="480" height="24" rx="4" fill="#8589A0"></rect>
+  </svg>
+</template>
+</helmet>
+<div style="background:#F2F3F7; padding:32px; min-height:100vh; box-sizing:border-box; font-family:'Source Sans 3', Arial, sans-serif;">
+
+  <!-- upload toolbar — screen only -->
+  <div data-screen-only="true" style="width:794px; max-width:100%; margin:0 auto 16px; display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+    <span style="display:inline-flex; align-items:center; gap:8px; font-size:13.5px; color:#4A4E63;">
+      <span style="{{ statusDot }}"></span><span>{{ statusLabel }}</span>
+    </span>
+    <div style="margin-left:auto; display:flex; align-items:center; gap:8px;">
+      <button onclick="{{ onPrint }}" style="background:#fff; color:#000F46; font-size:14px; font-weight:600; padding:9px 16px; border-radius:3px; cursor:pointer; border:1px solid #C9CEDE;">Print / PDF</button>
+      <button onclick="{{ onClear }}" disabled="{{ clearDisabled }}" style="{{ clearStyle }}">Clear</button>
+    </div>
+  </div>
+
+  <div ref="{{ rootRef }}" onblur="{{ onFieldBlur }}" class="kickoff-sheet" style="width:794px; max-width:100%; margin:0 auto; background:#fff; box-shadow:0 1px 2px rgba(0,15,70,0.06), 0 8px 24px rgba(0,15,70,0.06); display:flex; flex-direction:column;">
+
+    <!-- header band -->
+    <div style="background:#000F46; color:#fff; display:flex; align-items:center; gap:16px; padding:22px 48px;">
+      <div style="font-family:'Fraunces', Georgia, serif; font-size:22px; line-height:1.1; font-variation-settings:'SOFT' 50,'WONK' 0;">Sprint kick-off</div>
+      <label style="margin-left:auto; display:inline-flex; align-items:center; gap:8px; border-bottom:2px solid rgba(255,255,255,0.55); padding-bottom:3px; cursor:pointer;">
+        <select value="{{ sprint }}" onchange="{{ onSprintChange }}" style="appearance:none; -webkit-appearance:none; font-family:'Source Sans 3', Arial, sans-serif; font-size:15px; font-weight:700; color:#fff; background:transparent; border:none; padding:0; margin:0; cursor:pointer;">
+          <option value="" style="color:#000F46;">Select sprint month…</option>
+          <sc-for list="{{ months }}" as="m" hint-placeholder-count="6">
+            <option value="{{ m }}" style="color:#000F46;">{{ m }}</option>
+          </sc-for>
+        </select>
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="flex:0 0 auto; pointer-events:none;"><path d="M6 9l6 6 6-6"></path></svg>
+      </label>
+    </div>
+
+    <!-- body -->
+    <div style="padding:36px 48px 8px; flex:1;">
+      <sc-if value="{{ hasData }}" hint-placeholder-val="{{ true }}">
+      <div style="border-top:3px solid #000F46; margin:0 0 16px;"></div>
+      <p style="font-size:13px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:#8589A0; margin:0 0 12px;">Sprint goal</p>
+      <div data-field="goal" data-placeholder="What is the team aiming to achieve this sprint? State the goal in plain terms." contenteditable="true" suppresscontenteditablewarning="true" style="border:1px dashed #C9CEDE; border-radius:3px; padding:16px 18px; font-family:'Fraunces', Georgia, serif; font-weight:300; font-size:23px; line-height:1.28; color:#000F46; min-height:60px; margin:0 0 26px; font-variation-settings:'SOFT' 50,'WONK' 0,'opsz' 72; cursor:text;"></div>
+
+      <!-- metric strip -->
+      <div style="display:grid; grid-template-columns:repeat(5,1fr); gap:1px; background:#DDDEE6; border:1px solid #DDDEE6; border-radius:4px; overflow:hidden; margin-bottom:26px;">
+        <div style="background:#fff; padding:15px 16px;">
+          <div style="font-family:'Fraunces', Georgia, serif; font-weight:400; font-size:29px; color:#000F46; line-height:1;">{{ targetPoints }}</div>
+          <div style="font-size:12.5px; color:#8589A0; margin-top:6px;">Target story points</div>
+        </div>
+        <div style="background:#fff; padding:15px 16px;">
+          <div style="font-family:'Fraunces', Georgia, serif; font-weight:400; font-size:29px; color:#000F46; line-height:1;">{{ itemCount }}</div>
+          <div style="font-size:12.5px; color:#8589A0; margin-top:6px;">Backlog items committed</div>
+        </div>
+        <div style="background:#fff; padding:15px 16px;">
+          <div style="font-family:'Fraunces', Georgia, serif; font-weight:400; font-size:29px; color:#000F46; line-height:1;">{{ areaCount }}</div>
+          <div style="font-size:12.5px; color:#8589A0; margin-top:6px;">Business areas engaged</div>
+        </div>
+        <div style="background:#fff; padding:15px 16px;">
+          <div style="font-family:'Fraunces', Georgia, serif; font-weight:400; font-size:29px; color:#000F46; line-height:1;">{{ componentCount }}</div>
+          <div style="font-size:12.5px; color:#8589A0; margin-top:6px;">Components touched</div>
+        </div>
+        <div style="background:#fff; padding:15px 16px;">
+          <div style="font-family:'Fraunces', Georgia, serif; font-weight:400; font-size:29px; color:#B4232E; line-height:1;">{{ highCount }}</div>
+          <div style="font-size:12.5px; color:#8589A0; margin-top:6px;">High-priority items</div>
+        </div>
+      </div>
+
+      <!-- engagement chips -->
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:24px;">
+        <div>
+          <p style="font-size:12px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; color:#8589A0; margin:0 0 9px;">Business areas engaging <span data-screen-only="true" style="font-weight:600; color:#B6BAC9; letter-spacing:0;">· tap to filter</span></p>
+          <div style="display:flex; flex-wrap:wrap; gap:6px;">
+            <sc-for list="{{ areas }}" as="a" hint-placeholder-count="5">
+              <span onclick="{{ a.onClick }}" style="{{ a.style }}">{{ a.label }}</span>
+            </sc-for>
+          </div>
+        </div>
+        <div>
+          <p style="font-size:12px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; color:#8589A0; margin:0 0 9px;">Components touched <span data-screen-only="true" style="font-weight:600; color:#B6BAC9; letter-spacing:0;">· tap to filter</span></p>
+          <div style="display:flex; flex-wrap:wrap; gap:6px;">
+            <sc-for list="{{ components }}" as="c" hint-placeholder-count="4">
+              <span onclick="{{ c.onClick }}" style="{{ c.style }}">{{ c.label }}</span>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+
+      <!-- backlog table -->
+      <div style="display:flex; align-items:center; gap:12px; margin:0 0 14px; padding-bottom:10px; border-bottom:2px solid #000F46;">
+        <h2 style="font-family:'Fraunces', Georgia, serif; font-weight:400; font-size:21px; color:#000F46; margin:0; font-variation-settings:'SOFT' 50,'WONK' 0;">Sprint backlog</h2>
+        <span style="margin-left:auto; display:inline-flex; align-items:center; gap:12px;">
+          <sc-if value="{{ filterActive }}" hint-placeholder-val="{{ false }}">
+            <button data-screen-only="true" onclick="{{ onClearFilters }}" style="background:none; border:none; color:#00256E; font-size:12.5px; font-weight:600; cursor:pointer; padding:0; text-decoration:underline;">Clear filters</button>
+          </sc-if>
+          <span style="display:inline-block; background:#EAF0DC; color:#2C421D; font-size:12.5px; font-weight:600; padding:4px 12px; border-radius:999px; white-space:nowrap;">{{ backlogSummary }}</span>
+        </span>
+      </div>
+      <div style="width:100%; margin-bottom:20px; font-size:12.5px;">
+        <div style="display:grid; grid-template-columns:70px minmax(0,1fr) 118px 100px 40px; background:#000F46; color:#fff;">
+          <div style="padding:8px 10px; font-weight:600; font-size:11.5px;">Key</div>
+          <div style="padding:8px 10px; font-weight:600; font-size:11.5px;">Summary</div>
+          <div style="padding:8px 10px; font-weight:600; font-size:11.5px;">Priority</div>
+          <div style="padding:8px 10px; font-weight:600; font-size:11.5px; text-align:center;">Status</div>
+          <div style="padding:8px 8px; font-weight:600; font-size:11.5px; text-align:right;">Pts</div>
+        </div>
+        <sc-for list="{{ rows }}" as="row" hint-placeholder-count="12">
+          <div style="{{ row.rowStyle }}">
+            <div style="padding:7px 10px; font-family:ui-monospace,monospace; font-size:11.5px; font-weight:600; white-space:nowrap;"><a href="{{ row.keyHref }}" target="_blank" rel="noopener" style="color:#000F46; text-decoration:none; border-bottom:1px solid rgba(0,15,70,0.28);" style-hover="border-bottom-color:#000F46">{{ row.key }}</a></div>
+            <div style="padding:7px 10px; color:#3A3F57; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; min-width:0;" title="{{ row.summary }}">{{ row.summary }}</div>
+            <div style="padding:7px 10px; white-space:nowrap;"><span style="display:inline-flex; align-items:center; gap:6px; color:#4A4E63; font-weight:600;"><span style="{{ row.priDot }}"></span>{{ row.priority }}</span></div>
+            <div style="padding:7px 10px; text-align:center;"><span style="{{ row.statusStyle }}">{{ row.status }}</span></div>
+            <div style="padding:7px 8px; text-align:right; font-weight:700; color:#4A4E63;">{{ row.points }}</div>
+          </div>
+        </sc-for>
+      </div>
+      </sc-if>
+
+      <sc-if value="{{ empty }}" hint-placeholder-val="{{ false }}">
+      <div ondragover="{{ onDragOver }}" ondrop="{{ onDrop }}" style="border:2px dashed #C9CEDE; border-radius:4px; padding:56px 40px; text-align:center; margin:8px 0 40px;">
+        <div style="width:56px; height:56px; margin:0 auto 22px; background:#F2F3F7; border-radius:4px; display:flex; align-items:center; justify-content:center;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000F46" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3"></path><path d="M6 9l6-6 6 6"></path><path d="M4 15v4a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-4"></path></svg>
+        </div>
+        <h2 style="font-family:'Fraunces', Georgia, serif; font-weight:400; font-size:26px; color:#000F46; margin:0 0 10px; font-variation-settings:'SOFT' 50,'WONK' 0;">Import your Jira sprint export</h2>
+        <p style="font-size:15px; line-height:1.5; color:#6B7086; max-width:52ch; margin:0 auto 26px;">Drag a CSV here, or choose a file. Keys, summaries, business areas, statuses, story points and components populate automatically — nothing leaves your browser.</p>
+        <div style="display:flex; gap:10px; justify-content:center;">
+          <label ondragover="{{ onDragOver }}" ondrop="{{ onDrop }}" style="display:inline-flex; align-items:center; background:#000F46; color:#fff; font-size:14px; font-weight:600; padding:10px 18px; border-radius:3px; cursor:pointer; border:1px solid #000F46;">
+            Choose CSV file
+            <input type="file" accept=".csv,text/csv" onchange="{{ onFile }}" style="display:none;">
+          </label>
+          <button onclick="{{ onReset }}" style="background:#fff; color:#000F46; font-size:14px; font-weight:600; padding:10px 18px; border-radius:3px; cursor:pointer; border:1px solid #C9CEDE;">Load sample data</button>
+        </div>
+      </div>
+      </sc-if>
+    </div>
+
+    <!-- footer -->
+    <div style="border-top:2px solid #000F46; padding:14px 48px; display:flex; justify-content:space-between; font-size:12px; color:#8589A0;">
+      <span>Sprint kick-off — prepared for delivery &amp; stakeholder review</span>
+    </div>
+
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script="">
+class Component extends DCLogic {
+  rootRef = React.createRef();
+  ROWS_KEY = 'umel-kickoff-rows-v1';
+  META_KEY = 'umel-kickoff-meta-v1';
+
+  state = { rows: [], sourceLabel: 'SAMP-Sample-Sprint-Data.csv', areaFilter: [], compFilter: [], sprint: '', isSample: true };
+
+  buildMonths() {
+    return ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  }
+
+  onSprintChange = (e) => { const v = e.target.value; this.setState({ sprint: v }, () => this.persistMeta()); };
+
+  sampleCSV() {
+    return `Key,Summary,Issue Type,Status,Priority,Assignee,Reporter,Business Area,Story Points,Components,Labels,Created,Updated
+SAMP-8012,Enrolment wizard: allow payment plan selection at point of enrolment,Story,In Progress,High,Carol Chang,James Holloway,Enrolments,8,Enrolment Wizard,SprintCandidate,2025-02-18,2026-07-01
+SAMP-8007,Redesign fee statement PDF for clarity and accessibility,Story,In Progress,Medium,,Sean Goegan,Fees,5,Fees & Payments,SprintCandidate,2025-03-06,2026-07-02
+SAMP-7994,Admissions: bulk decision upload for course coordinators,Story,To Do,High,,Georgia Bryden,Admissions,13,Admissions Portal,SprintCandidate,2025-01-27,2026-06-30
+SAMP-7981,Scholarship eligibility rules engine refresh,Story,To Do,Medium,,Priya Nair,Scholarships,8,Fees & Payments,SprintCandidate,2025-04-14,2026-06-28
+SAMP-7962,Timetable clash detection for cross-faculty subjects,Story,In Progress,High,Daniel Osei,Chris Thornton,Timetabling,5,Timetabling,SprintCandidate,2025-02-02,2026-07-03
+SAMP-7950,Results release notification preferences,Story,To Do,Low,,Audrey Colbath,Internal SAS,3,Enrolment Wizard,,2025-05-19,2026-06-25
+SAMP-7937,Graduation ceremony seat allocation tool,Story,To Do,Low,,James Holloway,Admissions,5,Admissions Portal,SprintCandidate,2025-03-30,2026-06-22
+SAMP-7925,Enquiry routing by topic and priority,Story,In Progress,Medium,Simon Summerfield,Georgia Bryden,Enrolments,3,Integration Layer,SprintCandidate,2025-02-25,2026-07-04
+SAMP-7910,Resolve duplicate student identities during record merge,Story,Blocked,High,Carol Chang,Supriya Nalinikanth,Enrolments,13,Enrolment Wizard,"SprintCandidate, Risk",2025-01-15,2026-07-05
+SAMP-7899,Course planner: prerequisite validation at plan build,Story,To Do,Medium,,Chris Thornton,Enrolments,8,Enrolment Wizard,SprintCandidate,2025-04-01,2026-06-29
+SAMP-7884,Fees: refund workflow for withdrawn subjects,Story,In Progress,Medium,Priya Nair,Sean Goegan,Fees,5,Fees & Payments,SprintCandidate,2025-03-11,2026-07-01
+SAMP-7870,Publish admissions status changes to CRM via webhook,Story,To Do,High,Daniel Osei,Andrew Morley,"Admissions, Internal SAS",8,Integration Layer,"SprintCandidate, Integration",2025-02-08,2026-07-02
+SAMP-7856,Careers: work-integrated learning placement tracker,Story,To Do,Low,,James Holloway,Careers & Employability,13,Integration Layer,SprintCandidate,2025-05-02,2026-06-20
+SAMP-7841,Identity: multi-factor authentication rollout for staff portal,Story,In Review,High,Simon Summerfield,Supriya Nalinikanth,Internal SAS,5,Identity & Access,"SprintCandidate, Security",2025-01-20,2026-07-04
+SAMP-7830,Examinations: redesign special consideration form,Story,To Do,Medium,,Audrey Colbath,Internal SAS,3,Enrolment Wizard,SprintCandidate,2025-04-22,2026-06-27
+SAMP-7818,Enrolment: leave of absence self-service request,Story,To Do,Medium,,Georgia Bryden,Enrolments,8,Enrolment Wizard,SprintCandidate,2025-03-18,2026-07-03
+SAMP-7805,Scholarships: automated stipend payment schedule,Story,Blocked,Medium,Carol Chang,Priya Nair,Scholarships,8,Fees & Payments,"SprintCandidate, Risk",2025-02-12,2026-07-05
+SAMP-7792,Timetabling: room capacity utilisation reporting,Story,To Do,Low,,Chris Thornton,Timetabling,2,Timetabling,,2025-05-27,2026-06-18
+SAMP-7778,Graduations: digital testamur delivery,Story,In Progress,High,Daniel Osei,James Holloway,Admissions,13,Admissions Portal,SprintCandidate,2025-01-31,2026-07-02
+SAMP-7761,Knowledge base article versioning,Story,To Do,Low,,Georgia Bryden,Enrolments,2,Integration Layer,,2025-06-03,2026-06-15
+SAMP-7749,Nightly data reconciliation dashboard,Story,In Progress,Medium,Simon Summerfield,Andrew Morley,Internal SAS,21,Integration Layer,"SprintCandidate, Data",2025-02-05,2026-07-04`;
+  }
+
+  parseCSV(text) {
+    text = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+    const rows = []; let field = '', record = [], inQ = false;
+    for (let i = 0; i < text.length; i++) {
+      const c = text[i];
+      if (inQ) {
+        if (c === '"') { if (text[i + 1] === '"') { field += '"'; i++; } else { inQ = false; } }
+        else { field += c; }
+      } else if (c === '"') { inQ = true; }
+      else if (c === ',') { record.push(field); field = ''; }
+      else if (c === '\n') { record.push(field); rows.push(record); record = []; field = ''; }
+      else { field += c; }
+    }
+    if (field !== '' || record.length) { record.push(field); rows.push(record); }
+    return rows;
+  }
+
+  toObjects(text) {
+    const grid = this.parseCSV(text).filter(r => r.length > 1 || (r[0] && r[0].trim() !== ''));
+    if (!grid.length) return [];
+    const head = grid[0].map(h => h.trim().toLowerCase());
+    const idx = n => head.indexOf(n);
+    const iKey = idx('key'), iSum = idx('summary'), iStat = idx('status'), iPri = idx('priority'),
+      iArea = idx('business area'), iPts = idx('story points'), iComp = idx('components');
+    return grid.slice(1).filter(r => (r[iKey] || '').trim() !== '').map(r => ({
+      key: (r[iKey] || '').trim(),
+      summary: (r[iSum] || '').trim(),
+      status: (r[iStat] || '').trim() || 'New',
+      priority: (r[iPri] || '').trim() || '—',
+      area: (r[iArea] || '').trim(),
+      points: parseFloat(r[iPts]) || 0,
+      component: (r[iComp] || '').trim(),
+    }));
+  }
+
+  componentDidMount() {
+    let rows = null, label = 'SAMP-Sample-Sprint-Data.csv', isSample = true;
+    try { const s = localStorage.getItem(this.ROWS_KEY); if (s) { const p = JSON.parse(s); if (p.rows && p.rows.length) { rows = p.rows; label = p.label || 'imported.csv'; isSample = false; } } } catch (e) {}
+    if (!rows) rows = this.toObjects(this.sampleCSV());
+    this.setState({ rows, sourceLabel: label, isSample });
+    this.restoreMeta();
+  }
+
+  restoreMeta() {
+    const root = this.rootRef.current; if (!root) return;
+    let meta = {};
+    try { meta = JSON.parse(localStorage.getItem(this.META_KEY) || '{}'); } catch (e) {}
+    root.querySelectorAll('[data-field]').forEach(el => {
+      const k = el.dataset.field;
+      if (meta[k] != null && meta[k] !== '') el.textContent = meta[k];
+    });
+    if (meta.sprint && this.buildMonths().includes(meta.sprint)) this.setState({ sprint: meta.sprint });
+  }
+
+  persistMeta() {
+    const root = this.rootRef.current; if (!root) return;
+    const meta = {};
+    root.querySelectorAll('[data-field]').forEach(f => { meta[f.dataset.field] = f.textContent; });
+    meta.sprint = this.state.sprint;
+    try { localStorage.setItem(this.META_KEY, JSON.stringify(meta)); } catch (e) {}
+  }
+
+  onFieldBlur = (e) => {
+    const el = e.target;
+    if (!el || !el.dataset || !el.dataset.field) return;
+    this.persistMeta();
+  };
+
+  ingestText(text, label) {
+    const rows = this.toObjects(text);
+    if (!rows.length) { alert('No rows found. Expected a Jira CSV with Key, Summary, Status, Priority, Business Area, Story Points and Components columns.'); return; }
+    this.setState({ rows, sourceLabel: label, isSample: false, areaFilter: [], compFilter: [] });
+    try { localStorage.setItem(this.ROWS_KEY, JSON.stringify({ rows, label })); } catch (e) {}
+  }
+
+  readFile(file) {
+    if (!file) return;
+    const r = new FileReader();
+    r.onload = () => this.ingestText(String(r.result), file.name);
+    r.readAsText(file);
+  }
+
+  onFile = (e) => { this.readFile(e.target.files && e.target.files[0]); };
+  onDragOver = (e) => { e.preventDefault(); };
+  onDrop = (e) => { e.preventDefault(); this.readFile(e.dataTransfer.files && e.dataTransfer.files[0]); };
+  onReset = () => {
+    try { localStorage.removeItem(this.ROWS_KEY); } catch (e) {}
+    this.setState({ rows: this.toObjects(this.sampleCSV()), sourceLabel: 'SAMP-Sample-Sprint-Data.csv', isSample: true, areaFilter: [], compFilter: [] });
+  };
+  onClear = () => {
+    try { localStorage.removeItem(this.ROWS_KEY); } catch (e) {}
+    this.setState({ rows: [], sourceLabel: 'No file loaded', isSample: false, areaFilter: [], compFilter: [] });
+  };
+  onPrint = () => { window.print(); };
+
+  splitMulti(v) { return (v || '').split(',').map(s => s.trim()).filter(Boolean); }
+
+  toggle(list, name) { return list.includes(name) ? list.filter(x => x !== name) : list.concat([name]); }
+  toggleArea = (name) => () => this.setState(s => ({ areaFilter: this.toggle(s.areaFilter, name) }));
+  toggleComp = (name) => () => this.setState(s => ({ compFilter: this.toggle(s.compFilter, name) }));
+  onClearFilters = () => this.setState({ areaFilter: [], compFilter: [] });
+
+  statusStyleFor(status) {
+    const s = (status || '').toLowerCase();
+    let bg = '#EEF0F6', fg = '#3A3F57';
+    if (/done|closed|complete|resolved/.test(s)) { bg = '#EAF0DC'; fg = '#2C421D'; }
+    else if (/progress|active/.test(s)) { bg = '#DDF3FB'; fg = '#003C55'; }
+    else if (/review|test/.test(s)) { bg = '#FFF3CC'; fg = '#A84500'; }
+    else if (/block/.test(s)) { bg = '#FBE0E2'; fg = '#78000D'; }
+    else if (/new|to ?do|backlog|open|selected|commit/.test(s)) { bg = '#E4EAF6'; fg = '#00256E'; }
+    return { display: 'inline-block', background: bg, color: fg, fontWeight: 600, fontSize: '11px', padding: '3px 9px', borderRadius: '2px', whiteSpace: 'nowrap' };
+  }
+
+  priDotFor(priority) {
+    const p = (priority || '').toLowerCase();
+    let c = '#9AA0B4';
+    if (p === 'high' || p === 'highest') c = '#B4232E';
+    else if (p === 'medium') c = '#C98A00';
+    else if (p === 'low' || p === 'lowest') c = '#5C9A57';
+    return { display: 'inline-block', width: '7px', height: '7px', borderRadius: '50%', background: c, flex: '0 0 auto' };
+  }
+
+  renderVals() {
+    const rows = this.state.rows || [];
+    const areaSet = new Set(), compSet = new Set();
+    let points = 0, high = 0;
+    rows.forEach(r => {
+      points += r.points || 0;
+      if ((r.priority || '').toLowerCase() === 'high' || (r.priority || '').toLowerCase() === 'highest') high++;
+      this.splitMulti(r.area).forEach(a => areaSet.add(a));
+      this.splitMulti(r.component).forEach(c => compSet.add(c));
+    });
+    const fmtPts = Number.isInteger(points) ? points : points.toFixed(1);
+
+    const isSample = this.state.isSample, hasData = rows.length > 0;
+    const statusDot = { display: 'inline-block', width: '9px', height: '9px', borderRadius: '50%', background: hasData ? '#5C9A57' : '#B6BAC9', flex: '0 0 auto' };
+    const statusLabel = hasData ? (this.state.sourceLabel + (isSample ? ' (sample)' : '') + ' · ' + rows.length + ' issues') : 'No data imported yet';
+    const clearDisabled = !hasData;
+    const btnBase = { fontSize: '14px', fontWeight: 600, padding: '9px 16px', borderRadius: '3px' };
+    const clearStyle = clearDisabled
+      ? Object.assign({}, btnBase, { background: '#fff', color: '#B6BAC9', border: '1px solid #E7E8EF', cursor: 'default' })
+      : Object.assign({}, btnBase, { background: '#fff', color: '#000F46', border: '1px solid #C9CEDE', cursor: 'pointer' });
+
+    const areaFilter = this.state.areaFilter || [], compFilter = this.state.compFilter || [];
+    const filtered = rows.filter(r => {
+      const rA = this.splitMulti(r.area), rC = this.splitMulti(r.component);
+      const aOk = areaFilter.length === 0 || areaFilter.some(a => rA.includes(a));
+      const cOk = compFilter.length === 0 || compFilter.some(c => rC.includes(c));
+      return aOk && cOk;
+    });
+
+    const chip = (label, sel, outlined) => ({
+      label,
+      onClick: outlined ? this.toggleComp(label) : this.toggleArea(label),
+      style: sel
+        ? { display: 'inline-block', background: '#000F46', color: '#fff', fontSize: '12.5px', fontWeight: 600, padding: '4px 10px', borderRadius: '2px', border: '1px solid #000F46', cursor: 'pointer', userSelect: 'none' }
+        : { display: 'inline-block', background: outlined ? '#fff' : '#EEF0F6', color: outlined ? '#3A3F57' : '#000F46', fontSize: '12.5px', fontWeight: 600, padding: '4px 10px', borderRadius: '2px', border: outlined ? '1px solid #C9CEDE' : '1px solid transparent', cursor: 'pointer', userSelect: 'none' },
+    });
+    const areaChips = Array.from(areaSet).map(a => chip(a, areaFilter.includes(a), false));
+    const compChips = Array.from(compSet).map(c => chip(c, compFilter.includes(c), true));
+
+    const viewRows = filtered.map((r, i) => ({
+      key: r.key,
+      keyHref: r.key ? 'https://unimelb.atlassian.net/browse/' + encodeURIComponent(r.key) : '#',
+      summary: r.summary,
+      area: r.area || '—',
+      component: r.component || '—',
+      priority: r.priority,
+      status: r.status,
+      points: Number.isInteger(r.points) ? r.points : r.points.toFixed(1),
+      priDot: this.priDotFor(r.priority),
+      statusStyle: this.statusStyleFor(r.status),
+      rowStyle: { display: 'grid', gridTemplateColumns: '70px minmax(0,1fr) 118px 100px 40px', alignItems: 'center', borderBottom: '1px solid #E7E8EF', background: i % 2 === 1 ? '#F7F8FB' : '#fff' },
+    }));
+
+    return {
+      rows: viewRows,
+      targetPoints: fmtPts,
+      itemCount: rows.length,
+      areaCount: areaSet.size,
+      componentCount: compSet.size,
+      highCount: high,
+      areas: areaChips,
+      components: compChips.length ? compChips : [chip('—', false, true)],
+      backlogSummary: (() => {
+        let fp = 0; filtered.forEach(r => fp += r.points || 0);
+        const p = Number.isInteger(fp) ? fp : fp.toFixed(1);
+        return filtered.length === rows.length
+          ? (rows.length + ' items · ' + p + ' pts')
+          : (filtered.length + ' of ' + rows.length + ' items · ' + p + ' pts');
+      })(),
+      filterActive: areaFilter.length > 0 || compFilter.length > 0,
+      onClearFilters: this.onClearFilters,
+      statusDot, statusLabel, clearDisabled, clearStyle, hasData, empty: !hasData,
+      onPrint: this.onPrint,
+      onClear: this.onClear,
+      months: this.buildMonths(),
+      sprint: this.state.sprint,
+      onSprintChange: this.onSprintChange,
+      rootRef: this.rootRef,
+      onFieldBlur: this.onFieldBlur,
+      onFile: this.onFile,
+      onDrop: this.onDrop,
+      onDragOver: this.onDragOver,
+      onReset: this.onReset,
+    };
+  }
+}
+</script>
+
+
+</body></html>
