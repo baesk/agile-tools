@@ -74,6 +74,7 @@
         <x-import component-from-global-scope="UniversityOfMelbourneDesignSystem_ba1c60.Button" variant="primary" size="sm" on-click="{{ openAdd }}" hint-size="auto,36px">Add item</x-import>
         <x-import component-from-global-scope="UniversityOfMelbourneDesignSystem_ba1c60.Button" variant="secondary" size="sm" on-click="{{ importClick }}" hint-size="auto,36px">Import</x-import>
         <x-import component-from-global-scope="UniversityOfMelbourneDesignSystem_ba1c60.Button" variant="secondary" size="sm" on-click="{{ exportData }}" hint-size="auto,36px">Export</x-import>
+        <x-import component-from-global-scope="UniversityOfMelbourneDesignSystem_ba1c60.Button" variant="ghost" size="sm" on-click="{{ clearData }}" hint-size="auto,36px">Clear</x-import>
       </div>
     </div>
   </div>
@@ -357,6 +358,11 @@ class Component extends DCLogic {
     document.body.appendChild(a); a.click(); a.remove();
     URL.revokeObjectURL(url);
   };
+  clearData = () => {
+    if (!window.confirm('Clear all roadmap items? This cannot be undone. Export first if you want to keep this roadmap.')) return;
+    this.persist([]);
+    this.setState({ items: [], formOpen: false, form: null });
+  };
   importClick = () => { if (this.fileRef.current) this.fileRef.current.click(); };
   onImportFile = (e) => {
     const file = e.target.files && e.target.files[0]; if (!file) return;
@@ -496,7 +502,7 @@ class Component extends DCLogic {
       prevWindow: this.prevWindow, nextWindow: this.nextWindow,
       setRangeQuarter: this.setRangeQuarter, setRangeHalf: this.setRangeHalf, setRangeNine: this.setRangeNine, setRangeYear: this.setRangeYear,
       filterAll: this.filterAll, filterInternal: this.filterInternal, filterVendor: this.filterVendor, filterMaintenance: this.filterMaintenance,
-      openAdd: this.openAdd, exportData: this.exportData, importClick: this.importClick, onImportFile: this.onImportFile,
+      openAdd: this.openAdd, exportData: this.exportData, importClick: this.importClick, onImportFile: this.onImportFile, clearData: this.clearData,
       closeForm: this.closeForm, stopPanel: this.stopPanel, saveForm: this.saveForm, deleteItem: this.deleteItem,
       setTypeInitiative: this.setTypeInitiative, setTypeVendor: this.setTypeVendor, setTypeMaintenance: this.setTypeMaintenance,
       onName: this.onName, onJira: this.onJira, onState: this.onState, onStart: this.onStart, onEnd: this.onEnd, onNotes: this.onNotes
