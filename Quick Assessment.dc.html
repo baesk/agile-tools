@@ -1,0 +1,1224 @@
+<!DOCTYPE html>
+<html><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="_ds/university-of-melbourne-design-system-ba1c60e1-44aa-4acc-82aa-4515ae552e73/tokens/fonts.css">
+  <link rel="stylesheet" href="_ds/university-of-melbourne-design-system-ba1c60e1-44aa-4acc-82aa-4515ae552e73/tokens/colors.css">
+  <link rel="stylesheet" href="_ds/university-of-melbourne-design-system-ba1c60e1-44aa-4acc-82aa-4515ae552e73/tokens/typography.css">
+  <link rel="stylesheet" href="_ds/university-of-melbourne-design-system-ba1c60e1-44aa-4acc-82aa-4515ae552e73/tokens/spacing.css">
+  <link rel="stylesheet" href="_ds/university-of-melbourne-design-system-ba1c60e1-44aa-4acc-82aa-4515ae552e73/styles.css">
+  <script src="_ds/university-of-melbourne-design-system-ba1c60e1-44aa-4acc-82aa-4515ae552e73/_ds_bundle.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    body { margin: 0; background: #F7F7F4; font-family: 'Source Sans 3', Arial, sans-serif; }
+    @keyframes tabIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+    @keyframes dropIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
+    input, textarea, select {
+      font-family: 'Source Sans 3', Arial, sans-serif; font-size: 14px;
+      color: #000F46; background: white; border: 1px solid #DDDEE6;
+      border-radius: 2px; padding: 8px 12px; width: 100%; outline: none;
+      transition: border-color 150ms, box-shadow 150ms;
+    }
+    input:focus, textarea:focus, select:focus {
+      border-color: #000F46; box-shadow: 0 0 0 3px rgba(0,15,70,0.08);
+    }
+    textarea { resize: vertical; line-height: 1.55; min-height: 80px; }
+    select { cursor: pointer; }
+    ::placeholder { color: #8589A0; }
+    button { font-family: 'Source Sans 3', Arial, sans-serif; }
+  </style>
+  <template id="__bundler_thumbnail" data-bg-color="#000F46">
+    <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+      <rect width="1200" height="800" fill="#000F46"></rect>
+      <rect x="330" y="250" width="540" height="60" rx="6" fill="#FFFFFF"></rect>
+      <rect x="330" y="360" width="150" height="150" rx="6" fill="#8589A0"></rect>
+      <rect x="505" y="360" width="150" height="150" rx="6" fill="#46C8F0"></rect>
+      <rect x="680" y="360" width="150" height="150" rx="6" fill="#9FB825"></rect>
+    </svg>
+  </template>
+</helmet>
+
+<div style="min-height: 100vh; background: #F7F7F4; display: flex; flex-direction: column;">
+
+  <!-- ══════ HEADER ══════ -->
+  <div style="background: #000F46; flex-shrink: 0;">
+    <div style="max-width: 1240px; margin: 0 auto; padding: 0 48px;">
+
+      <!-- Eyebrow + save status -->
+      <div style="padding: 14px 0 0; display: flex; align-items: center; justify-content: space-between; gap: 16px;">
+        <p style="font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.38); margin: 0;">Quick Assessment · RICE</p>
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <p style="font-size: 11px; color: rgba(255,255,255,0.32); margin: 0;">{{ saveStatus }}</p>
+          <div style="width: 1px; height: 12px; background: rgba(255,255,255,0.15);"></div>
+          <button onclick="{{ exportData }}" style="font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.6); background: transparent; border: 1px solid rgba(255,255,255,0.2); border-radius: 2px; padding: 3px 10px; cursor: pointer; letter-spacing: 0.02em;">Export data</button>
+          <button onclick="{{ triggerImport }}" style="font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.6); background: transparent; border: 1px solid rgba(255,255,255,0.2); border-radius: 2px; padding: 3px 10px; cursor: pointer; letter-spacing: 0.02em;">Import data</button>
+          <button onclick="{{ printPdf }}" style="font-size: 11px; font-weight: 600; color: #000F46; background: #fff; border: 1px solid #fff; border-radius: 2px; padding: 3px 10px; cursor: pointer; letter-spacing: 0.02em;">Print to PDF</button>
+          <input type="file" accept=".json" onchange="{{ importData }}" style="display: none;" ref="{{ fileInputRef }}">
+        </div>
+      </div>
+
+      <!-- Title row + metadata -->
+      <div style="padding: 6px 0 0; display: flex; align-items: flex-start; justify-content: space-between; gap: 24px;">
+
+        <!-- Initiative switcher -->
+        <div class="initiative-switcher" style="position: relative; flex: 1; min-width: 0;">
+          <button onclick="{{ toggleDropdown }}" style="display: flex; align-items: center; gap: 10px; background: transparent; border: none; cursor: pointer; padding: 0; max-width: 680px; text-align: left;">
+            <h1 style="font-family: 'Fraunces', Georgia, serif; font-weight: 300; font-size: 32px; line-height: 1.1; color: white; margin: 0; font-variation-settings: 'SOFT' 50, 'WONK' 0, 'opsz' 72; text-wrap: balance;">{{ displayTitle }}</h1>
+            <span style="{{ chevronStyle }}">▼</span>
+          </button>
+
+          <!-- Dropdown -->
+          <sc-if value="{{ showDropdown }}" hint-placeholder-val="{{ false }}">
+            <div>
+            <div onclick="{{ closeDropdown }}" style="position: fixed; inset: 0; z-index: 199;"></div>
+            <div style="position: absolute; top: calc(100% + 10px); left: 0; background: white; border: 1px solid #DDDEE6; border-radius: 2px; min-width: 420px; z-index: 200; box-shadow: 0 8px 40px rgba(0,15,70,0.2); animation: dropIn 150ms cubic-bezier(0.2,0,0.1,1); overflow: hidden;">
+              <!-- Dropdown header -->
+              <div style="padding: 10px 14px; background: #F2F3F7; border-bottom: 1px solid #DDDEE6; display: flex; align-items: center; justify-content: space-between;">
+                <p style="font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #000F46; margin: 0;">Saved backlog items</p>
+                <button onclick="{{ newInitiative }}" style="font-size: 12px; font-weight: 700; color: white; background: #000F46; border: none; border-radius: 2px; padding: 5px 12px; cursor: pointer;">+ New backlog item</button>
+              </div>
+              <!-- Initiative rows -->
+              <div style="max-height: 320px; overflow-y: auto;">
+                <sc-for list="{{ initiativeList }}" as="init" hint-placeholder-count="2">
+                  <div style="{{ init.rowStyle }}">
+                    <div onclick="{{ init.selectFn }}" style="display: flex; align-items: center; gap: 12px; flex: 1; padding: 11px 14px; cursor: {{ init.cursorStyle }}; min-width: 0;">
+                      <div style="flex: 1; min-width: 0;">
+                        <p style="font-size: 13px; font-weight: 700; color: #000F46; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ init.name }}</p>
+                        <p style="font-size: 11px; color: #8589A0; margin: 0; margin-top: 1px;">{{ init.meta }}</p>
+                      </div>
+                      <div style="{{ init.riceBadgeStyle }}">
+                        <span style="font-size: 11px; font-weight: 700; color: {{ init.riceColor }};">RICE {{ init.rice }}</span>
+                      </div>
+                      <sc-if value="{{ init.isActive }}" hint-placeholder-val="{{ false }}">
+                        <span style="font-size: 10px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #9FB825; flex-shrink: 0;">Active</span>
+                      </sc-if>
+                    </div>
+                    <button onclick="{{ init.deleteFn }}" style="{{ init.deleteBtnStyle }}" title="Delete backlog item">{{ init.deleteLabel }}</button>
+                  </div>
+                </sc-for>
+              </div>
+              <!-- Empty state -->
+              <sc-if value="{{ noInitiatives }}" hint-placeholder-val="{{ false }}">
+                <p style="font-size: 13px; color: #8589A0; margin: 0; padding: 16px 14px; text-align: center;">No saved backlog items yet.</p>
+              </sc-if>
+            </div>
+            </div>
+          </sc-if>
+        </div>
+
+        <!-- Metadata -->
+        <div style="flex-shrink: 0; padding-top: 4px; text-align: right; display: flex; flex-direction: column; gap: 4px;">
+          <sc-if value="{{ hasBusinessArea }}" hint-placeholder-val="{{ false }}">
+            <p style="font-size: 13px; color: rgba(255,255,255,0.6); margin: 0;"><span style="color: rgba(255,255,255,0.35);">Area · </span>{{ businessArea }}</p>
+          </sc-if>
+          <sc-if value="{{ hasTicket }}" hint-placeholder-val="{{ false }}">
+            <p style="font-size: 13px; color: rgba(255,255,255,0.6); margin: 0;"><span style="color: rgba(255,255,255,0.35);">Ticket · </span>{{ ticketNumber }}</p>
+          </sc-if>
+          <sc-if value="{{ hasDate }}" hint-placeholder-val="{{ false }}">
+            <p style="font-size: 13px; color: rgba(255,255,255,0.6); margin: 0;"><span style="color: rgba(255,255,255,0.35);">Target · </span>{{ idealDate }}</p>
+          </sc-if>
+        </div>
+      </div>
+
+      <!-- Tab bar -->
+      <div style="display: flex; gap: 2px; margin-top: 14px; overflow-x: auto;">
+        <sc-for list="{{ tabs }}" as="tab" hint-placeholder-count="6">
+          <button onclick="{{ tab.onClick }}" style="{{ tab.style }}">{{ tab.label }}</button>
+        </sc-for>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════ TAB CONTENT ══════ -->
+  <div style="flex: 1; max-width: 1240px; width: 100%; margin: 0 auto; padding: 0 48px;">
+
+    <!-- ── SCORE TAB ── -->
+    <sc-if value="{{ showScore }}" hint-placeholder-val="{{ true }}">
+      <div style="padding: 32px 0; animation: tabIn 180ms cubic-bezier(0.2,0,0.1,1);">
+
+        <!-- Initiative details -->
+        <div style="background: white; border: 1px solid #DDDEE6; border-top: 3px solid #000F46; border-radius: 0 0 2px 2px; padding: 20px 24px; margin-bottom: 20px;">
+          <div style="display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 160px; gap: 14px;">
+            <div>
+              <label style="display: block; font-size: 10px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: #8589A0; margin-bottom: 6px;">Backlog item</label>
+              <input type="text" value="{{ initiativeName }}" onchange="{{ setInitiativeName }}" placeholder="Enter backlog item name">
+            </div>
+            <div>
+              <label style="display: block; font-size: 10px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: #8589A0; margin-bottom: 6px;">Business area</label>
+              <input type="text" value="{{ businessArea }}" onchange="{{ setBusinessArea }}" placeholder="Owning area">
+            </div>
+            <div>
+              <label style="display: block; font-size: 10px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: #8589A0; margin-bottom: 6px;">Ticket number</label>
+              <input type="text" value="{{ ticketNumber }}" onchange="{{ setTicketNumber }}" placeholder="e.g. INC0012345">
+            </div>
+            <div>
+              <label style="display: block; font-size: 10px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: #8589A0; margin-bottom: 6px;">Requestor</label>
+              <input type="text" value="{{ requestor }}" onchange="{{ setRequestor }}" placeholder="Who is requesting?">
+            </div>
+            <div>
+              <label style="display: block; font-size: 10px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: #8589A0; margin-bottom: 6px;">Ideal date</label>
+              <input type="date" value="{{ idealDate }}" onchange="{{ setIdealDate }}">
+            </div>
+          </div>
+          <div style="margin-top: 14px; display: grid; grid-template-columns: 1fr 2fr; gap: 14px;">
+            <div>
+              <label style="display: block; font-size: 10px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: #8589A0; margin-bottom: 6px;">Priority criteria</label>
+              <select value="{{ priority }}" onchange="{{ setPriority }}">
+                <option value="Standard">Standard</option>
+                <option value="Time sensitive">Time sensitive</option>
+                <option value="Compliance related">Compliance related</option>
+              </select>
+            </div>
+            <div>
+              <label style="display: block; font-size: 10px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: #8589A0; margin-bottom: 6px;">Deadlines and dependencies</label>
+              <input type="text" value="{{ dependencies }}" onchange="{{ setDependencies }}" placeholder="Any deadlines or dependencies driving this backlog item?">
+            </div>
+          </div>
+        </div>
+
+        <!-- RICE summary card -->
+        <div style="display: grid; grid-template-columns: 180px 1fr; background: white; border: 1px solid #DDDEE6; border-top: 3px solid #000F46; border-radius: 0 0 2px 2px; overflow: hidden; margin-bottom: 20px; box-shadow: 0 1px 2px rgba(0,15,70,0.04);">
+          <div style="{{ ricePanelStyle }}">
+            <p style="{{ riceEyebrowStyle }}">RICE</p>
+            <p style="{{ riceNumStyle }}">{{ riceDisplay }}</p>
+            <p style="{{ riceVerdictStyle }}">{{ riceVerdict }}</p>
+          </div>
+          <div style="padding: 20px 24px; display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; align-items: start;">
+            <div>
+              <p style="font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #8589A0; margin: 0 0 8px;">Reach</p>
+              <div style="{{ reachBadgeStyle }}"><span style="{{ reachBadgeTextStyle }}">{{ reachRating }}</span></div>
+            </div>
+            <div>
+              <p style="font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #8589A0; margin: 0 0 8px;">Impact</p>
+              <div style="{{ impactBadgeStyle }}"><span style="{{ impactBadgeTextStyle }}">{{ impactRating }}</span></div>
+            </div>
+            <div>
+              <p style="font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #8589A0; margin: 0 0 8px;">Urgency</p>
+              <div style="{{ urgencyBadgeStyle }}"><span style="{{ urgencyBadgeTextStyle }}">{{ urgencyRating }}</span></div>
+            </div>
+            <div>
+              <p style="font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #8589A0; margin: 0 0 8px;">Risk</p>
+              <div style="{{ riskBadgeStyle }}"><span style="{{ riskBadgeTextStyle }}">{{ riskRating }}</span></div>
+            </div>
+            <div>
+              <p style="font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #8589A0; margin: 0 0 8px;">Combined value</p>
+              <div style="display: inline-flex; align-items: center; padding: 4px 12px; background: #F2F3F7; border-radius: 999px;">
+                <span style="font-size: 14px; font-weight: 700; color: #000F46;">{{ valueScore }}</span>
+              </div>
+            </div>
+            <div>
+              <p style="font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #8589A0; margin: 0 0 8px;">Effort</p>
+              <div style="display: inline-flex; align-items: center; padding: 4px 12px; background: #F7F7F4; border: 1px solid #DDDEE6; border-radius: 999px;">
+                <span style="font-size: 14px; font-weight: 700; color: #000F46;">{{ effortSizeLabel }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Justification banner -->
+        <div style="{{ justBannerStyle }}">
+          <div style="{{ justIconStyle }}">{{ justIcon }}</div>
+          <div>
+            <p style="font-size: 14px; font-weight: 700; color: #000F46; margin: 0 0 2px;">{{ justLabel }}</p>
+            <p style="font-size: 13px; color: #4A4E63; margin: 0; line-height: 1.4;">{{ justDesc }}</p>
+          </div>
+        </div>
+
+        <!-- Criteria header -->
+        <div style="display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 14px;">
+          <h2 style="font-family: 'Fraunces', Georgia, serif; font-weight: 300; font-size: 22px; color: #000F46; margin: 0; font-variation-settings: 'SOFT' 50, 'WONK' 0, 'opsz' 72;">Rate Reach and Impact</h2>
+          <p style="font-size: 12px; color: #8589A0; margin: 0;">Select N/A if a factor does not apply to this backlog item</p>
+        </div>
+
+        <!-- Criteria grid -->
+        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 24px;">
+          <sc-for list="{{ criteria }}" as="crit" hint-placeholder-count="4">
+            <div style="background: white; border: 1px solid #DDDEE6; border-radius: 2px; overflow: hidden;">
+              <div style="{{ crit.headerStyle }}">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                  <span style="{{ crit.nameStyle }}">{{ crit.name }}</span>
+                  <span style="{{ crit.taglineStyle }}">{{ crit.tagline }}</span>
+                </div>
+                <div style="{{ crit.scoreBadgeStyle }}">{{ crit.scoreLabel }}</div>
+              </div>
+              <div style="padding: 10px 12px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; border-bottom: 1px solid #DDDEE6;">
+                <div style="padding: 8px; background: #F7F7F4; border-top: 2px solid #9FB825;">
+                  <p style="font-size: 9px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #2C421D; margin: 0 0 3px;">High · 3</p>
+                  <p style="font-size: 11px; color: #4A4E63; margin: 0; line-height: 1.4;">{{ crit.highDesc }}</p>
+                </div>
+                <div style="padding: 8px; background: #F7F7F4; border-top: 2px solid #FFD629;">
+                  <p style="font-size: 9px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #A84500; margin: 0 0 3px;">Medium · 2</p>
+                  <p style="font-size: 11px; color: #4A4E63; margin: 0; line-height: 1.4;">{{ crit.medDesc }}</p>
+                </div>
+                <div style="padding: 8px; background: #F7F7F4; border-top: 2px solid #C8C8C8;">
+                  <p style="font-size: 9px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #4A4E63; margin: 0 0 3px;">Low · 1</p>
+                  <p style="font-size: 11px; color: #4A4E63; margin: 0; line-height: 1.4;">{{ crit.lowDesc }}</p>
+                </div>
+              </div>
+              <div style="padding: 10px 12px; display: flex; gap: 5px;">
+                <button onclick="{{ scoreHandler }}" data-criterion="{{ crit.key }}" data-value="3" style="{{ crit.highStyle }}">High · 3</button>
+                <button onclick="{{ scoreHandler }}" data-criterion="{{ crit.key }}" data-value="2" style="{{ crit.medStyle }}">Med · 2</button>
+                <button onclick="{{ scoreHandler }}" data-criterion="{{ crit.key }}" data-value="1" style="{{ crit.lowStyle }}">Low · 1</button>
+                <button onclick="{{ scoreHandler }}" data-criterion="{{ crit.key }}" data-value="0" style="{{ crit.naStyle }}">N/A</button>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+
+        <!-- Effort estimate -->
+        <div style="background: white; border: 1px solid #DDDEE6; border-radius: 2px; padding: 22px 24px; margin-bottom: 32px;">
+          <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 16px; margin-bottom: 5px;">
+            <h3 style="font-family: 'Fraunces', Georgia, serif; font-weight: 300; font-size: 20px; color: #000F46; margin: 0; font-variation-settings: 'SOFT' 50, 'WONK' 0, 'opsz' 72;">Effort estimate</h3>
+            <span style="{{ effortSizeBadgeStyle }}">{{ effortSizeLabel }}</span>
+          </div>
+          <p style="font-size: 13px; color: #4A4E63; margin: 0 0 18px; line-height: 1.55; max-width: 660px;">Answer as your engineers would when sizing a story. The three answers are averaged into a story point &mdash; if it lands between two sizes it rounds up to the larger. See the Effort guide tab for the full cheat sheet.</p>
+          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px;">
+            <div>
+              <label style="display: block; font-size: 10px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: #8589A0; margin-bottom: 7px;">How much is known about the task</label>
+              <select value="{{ effortKnowledge }}" onchange="{{ setKnowledge }}">
+                <option value="0">Everything</option>
+                <option value="1">Almost everything</option>
+                <option value="2">Something</option>
+                <option value="3">Almost nothing</option>
+                <option value="4">Nothing</option>
+                <option value="5">Nothing at all</option>
+              </select>
+            </div>
+            <div>
+              <label style="display: block; font-size: 10px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: #8589A0; margin-bottom: 7px;">Dependencies</label>
+              <select value="{{ effortDependencies }}" onchange="{{ setEffortDeps }}">
+                <option value="0">None</option>
+                <option value="1">Almost none</option>
+                <option value="2">Some</option>
+                <option value="3">Few</option>
+                <option value="4">More than a few</option>
+                <option value="5">Unknown</option>
+              </select>
+            </div>
+            <div>
+              <label style="display: block; font-size: 10px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: #8589A0; margin-bottom: 7px;">How much work effort</label>
+              <select value="{{ effortWork }}" onchange="{{ setWork }}">
+                <option value="0">Less than 2 hours</option>
+                <option value="1">Half a day</option>
+                <option value="2">Up to two days</option>
+                <option value="3">A few days</option>
+                <option value="4">Around a week</option>
+                <option value="5">More than one week</option>
+              </select>
+            </div>
+          </div>
+          <div style="{{ effortSplitNoteStyle }}">{{ effortSplitNote }}</div>
+        </div>
+
+      </div>
+    </sc-if>
+
+    <!-- ── CALCULATIONS TAB ── -->
+    <sc-if value="{{ showCalculations }}" hint-placeholder-val="{{ false }}">
+      <div style="padding: 32px 0; animation: tabIn 180ms cubic-bezier(0.2,0,0.1,1);">
+
+        <h2 style="font-family: 'Fraunces', Georgia, serif; font-weight: 300; font-size: 22px; color: #000F46; margin: 0 0 6px; font-variation-settings: 'SOFT' 50, 'WONK' 0, 'opsz' 72;">How the RICE score is calculated</h2>
+        <p style="font-size: 14px; color: #4A4E63; margin: 0 0 24px; max-width: 760px; line-height: 1.6;">This is a simplified RICE model. <strong>Reach</strong> and <strong>Impact</strong> combine into a single <strong>Combined value</strong>, which is then divided by the <strong>Effort</strong> required. The matrices below are highlighted to show where this backlog item currently sits.</p>
+
+        <!-- Live worked example -->
+        <div style="background: #000F46; border-radius: 2px; padding: 20px 24px; margin-bottom: 28px;">
+          <p style="font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.45); margin: 0 0 16px;">This backlog item, step by step</p>
+          <div style="display: flex; align-items: stretch; gap: 8px; flex-wrap: wrap;">
+            <div style="flex: 1; min-width: 104px; background: rgba(255,255,255,0.06); border-radius: 2px; padding: 12px 14px;">
+              <p style="font-size: 10px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: rgba(255,255,255,0.5); margin: 0 0 5px;">Reach</p>
+              <p style="font-family: 'Fraunces', Georgia, serif; font-weight: 500; font-size: 26px; color: #fff; margin: 0; line-height: 1; font-variation-settings: 'SOFT' 50, 'WONK' 0, 'opsz' 72;">{{ reachRating }}</p>
+              <p style="font-size: 11px; color: rgba(255,255,255,0.5); margin: 4px 0 0;">Usage &amp; efficiency</p>
+            </div>
+            <div style="display: flex; align-items: center; color: rgba(255,255,255,0.35); font-size: 18px;">+</div>
+            <div style="flex: 1; min-width: 104px; background: rgba(255,255,255,0.06); border-radius: 2px; padding: 12px 14px;">
+              <p style="font-size: 10px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: rgba(255,255,255,0.5); margin: 0 0 5px;">Impact</p>
+              <p style="font-family: 'Fraunces', Georgia, serif; font-weight: 500; font-size: 26px; color: #fff; margin: 0; line-height: 1; font-variation-settings: 'SOFT' 50, 'WONK' 0, 'opsz' 72;">{{ impactRating }}</p>
+              <p style="font-size: 11px; color: rgba(255,255,255,0.5); margin: 4px 0 0;">Breadth of benefit</p>
+            </div>
+            <div style="display: flex; align-items: center; color: rgba(255,255,255,0.35); font-size: 18px;">+</div>
+            <div style="flex: 1; min-width: 104px; background: rgba(255,255,255,0.06); border-radius: 2px; padding: 12px 14px;">
+              <p style="font-size: 10px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: rgba(255,255,255,0.5); margin: 0 0 5px;">Urgency</p>
+              <p style="font-family: 'Fraunces', Georgia, serif; font-weight: 500; font-size: 26px; color: #fff; margin: 0; line-height: 1; font-variation-settings: 'SOFT' 50, 'WONK' 0, 'opsz' 72;">{{ urgencyRating }}</p>
+              <p style="font-size: 11px; color: rgba(255,255,255,0.5); margin: 4px 0 0;">Timing pressure</p>
+            </div>
+            <div style="display: flex; align-items: center; color: rgba(255,255,255,0.35); font-size: 18px;">×</div>
+            <div style="flex: 1; min-width: 104px; background: rgba(255,255,255,0.06); border-radius: 2px; padding: 12px 14px;">
+              <p style="font-size: 10px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: rgba(255,255,255,0.5); margin: 0 0 5px;">Risk</p>
+              <p style="font-family: 'Fraunces', Georgia, serif; font-weight: 500; font-size: 26px; color: #fff; margin: 0; line-height: 1; font-variation-settings: 'SOFT' 50, 'WONK' 0, 'opsz' 72;">{{ riskRating }}</p>
+              <p style="font-size: 11px; color: rgba(255,255,255,0.5); margin: 4px 0 0;">% modifier</p>
+            </div>
+            <div style="display: flex; align-items: center; color: rgba(255,255,255,0.35); font-size: 18px;">→</div>
+            <div style="flex: 1; min-width: 118px; background: rgba(159,184,37,0.16); border: 1px solid rgba(159,184,37,0.4); border-radius: 2px; padding: 12px 14px;">
+              <p style="font-size: 10px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #C6DA6B; margin: 0 0 5px;">Combined value</p>
+              <p style="font-family: 'Fraunces', Georgia, serif; font-weight: 500; font-size: 26px; color: #fff; margin: 0; line-height: 1; font-variation-settings: 'SOFT' 50, 'WONK' 0, 'opsz' 72;">{{ valueScore }}</p>
+              <p style="font-size: 11px; color: rgba(255,255,255,0.5); margin: 4px 0 0;">(R + I + U) × Risk</p>
+            </div>
+            <div style="display: flex; align-items: center; color: rgba(255,255,255,0.35); font-size: 18px;">÷</div>
+            <div style="flex: 1; min-width: 128px; background: rgba(255,255,255,0.06); border-radius: 2px; padding: 12px 14px;">
+              <p style="font-size: 10px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: rgba(255,255,255,0.5); margin: 0 0 5px;">Effort</p>
+              <p style="font-family: 'Fraunces', Georgia, serif; font-weight: 500; font-size: 26px; color: #fff; margin: 0; line-height: 1; font-variation-settings: 'SOFT' 50, 'WONK' 0, 'opsz' 72;">{{ tShirtLabel }}</p>
+              <p style="font-size: 11px; color: rgba(255,255,255,0.5); margin: 4px 0 0;">T-shirt size</p>
+            </div>
+            <div style="display: flex; align-items: center; color: rgba(255,255,255,0.35); font-size: 18px;">→</div>
+            <div style="flex: 1; min-width: 128px; background: #fff; border-radius: 2px; padding: 12px 14px;">
+              <p style="font-size: 10px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #8589A0; margin: 0 0 5px;">RICE</p>
+              <p style="font-family: 'Fraunces', Georgia, serif; font-weight: 600; font-size: 26px; color: #000F46; margin: 0; line-height: 1; font-variation-settings: 'SOFT' 50, 'WONK' 0, 'opsz' 72;">{{ riceDisplay }}</p>
+              <p style="font-size: 11px; color: #8589A0; margin: 4px 0 0;">Priority ranking</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 1: Reach & Impact ratings -->
+        <div style="background: white; border: 1px solid #DDDEE6; border-top: 3px solid #000F46; border-radius: 0 0 2px 2px; padding: 22px 24px; margin-bottom: 16px;">
+          <div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: 6px;">
+            <span style="font-family: 'Fraunces', Georgia, serif; font-weight: 400; font-size: 15px; color: #9FB825; font-variation-settings: 'SOFT' 50, 'WONK' 0, 'opsz' 72;">Step 1</span>
+            <h3 style="font-family: 'Fraunces', Georgia, serif; font-weight: 300; font-size: 20px; color: #000F46; margin: 0; font-variation-settings: 'SOFT' 50, 'WONK' 0, 'opsz' 72;">The four value factors</h3>
+          </div>
+          <p style="font-size: 14px; color: #4A4E63; margin: 0 0 18px; line-height: 1.6; max-width: 720px;">Reach, Impact and Urgency are each rated High (3), Medium (2), Low (1) or N/A (0) and added together (0–9). <strong>Risk</strong> is then applied as a percentage modifier — High 100%, Medium 80%, Low 50% — so lower-risk work is discounted rather than inflated.</p>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+            <div style="border: 1px solid #DDDEE6; border-radius: 2px; padding: 14px 16px;">
+              <p style="font-size: 13px; font-weight: 700; color: #000F46; margin: 0 0 8px;">Reach — usage, efficiency, experience</p>
+              <p style="font-size: 13px; color: #4A4E63; margin: 0 0 3px; line-height: 1.5;"><strong style="color:#2C421D;">High</strong> · frequent, high-volume use with major gains</p>
+              <p style="font-size: 13px; color: #4A4E63; margin: 0 0 3px; line-height: 1.5;"><strong style="color:#A84500;">Medium</strong> · moderate use and reasonable gains</p>
+              <p style="font-size: 13px; color: #4A4E63; margin: 0; line-height: 1.5;"><strong style="color:#4A4E63;">Low</strong> · occasional use with minor gains</p>
+            </div>
+            <div style="border: 1px solid #DDDEE6; border-radius: 2px; padding: 14px 16px;">
+              <p style="font-size: 13px; font-weight: 700; color: #000F46; margin: 0 0 8px;">Impact — breadth of benefit</p>
+              <p style="font-size: 13px; color: #4A4E63; margin: 0 0 3px; line-height: 1.5;"><strong style="color:#2C421D;">High</strong> · all or the majority of a cohort benefits</p>
+              <p style="font-size: 13px; color: #4A4E63; margin: 0 0 3px; line-height: 1.5;"><strong style="color:#A84500;">Medium</strong> · several groups, or one large group</p>
+              <p style="font-size: 13px; color: #4A4E63; margin: 0; line-height: 1.5;"><strong style="color:#4A4E63;">Low</strong> · a single or small group benefits</p>
+            </div>
+            <div style="border: 1px solid #DDDEE6; border-radius: 2px; padding: 14px 16px;">
+              <p style="font-size: 13px; font-weight: 700; color: #000F46; margin: 0 0 8px;">Urgency — timing pressure</p>
+              <p style="font-size: 13px; color: #4A4E63; margin: 0 0 3px; line-height: 1.5;"><strong style="color:#2C421D;">High</strong> · directive, capital project or immovable deadline</p>
+              <p style="font-size: 13px; color: #4A4E63; margin: 0 0 3px; line-height: 1.5;"><strong style="color:#A84500;">Medium</strong> · no deadline, but as soon as practical</p>
+              <p style="font-size: 13px; color: #4A4E63; margin: 0; line-height: 1.5;"><strong style="color:#4A4E63;">Low</strong> · no timeline and no defined deadline</p>
+            </div>
+            <div style="border: 1px solid #DDDEE6; border-radius: 2px; padding: 14px 16px;">
+              <p style="font-size: 13px; font-weight: 700; color: #000F46; margin: 0 0 8px;">Risk — percentage modifier</p>
+              <p style="font-size: 13px; color: #4A4E63; margin: 0 0 3px; line-height: 1.5;"><strong style="color:#2C421D;">High · 100%</strong> · many failures, major impact or security risk</p>
+              <p style="font-size: 13px; color: #4A4E63; margin: 0 0 3px; line-height: 1.5;"><strong style="color:#A84500;">Medium · 80%</strong> · some failures, manageable with a workaround</p>
+              <p style="font-size: 13px; color: #4A4E63; margin: 0; line-height: 1.5;"><strong style="color:#4A4E63;">Low · 50%</strong> · almost no failures, minor annoyances only</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 2: Combined value matrix -->
+        <div style="background: white; border: 1px solid #DDDEE6; border-top: 3px solid #000F46; border-radius: 0 0 2px 2px; padding: 22px 24px; margin-bottom: 16px;">
+          <div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: 6px;">
+            <span style="font-family: 'Fraunces', Georgia, serif; font-weight: 400; font-size: 15px; color: #9FB825; font-variation-settings: 'SOFT' 50, 'WONK' 0, 'opsz' 72;">Step 2</span>
+            <h3 style="font-family: 'Fraunces', Georgia, serif; font-weight: 300; font-size: 20px; color: #000F46; margin: 0; font-variation-settings: 'SOFT' 50, 'WONK' 0, 'opsz' 72;">Combined value = (Reach + Impact + Urgency) × Risk</h3>
+          </div>
+          <p style="font-size: 14px; color: #4A4E63; margin: 0 0 18px; line-height: 1.6; max-width: 720px;">Reach, Impact and Urgency (each 0–3) are added, then multiplied by the Risk modifier (High 100%, Medium 80%, Low 50%) — giving a total of 0–9 that maps to a single Combined value of 3, 5, 8, 13 or 20 using the bands below. The <span style="color: #000F46; font-weight: 700;">highlighted row</span> is this backlog item.</p>
+          <div style="border: 1px solid #DDDEE6; border-radius: 2px; overflow: hidden; max-width: 520px;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; background: #000F46;">
+              <div style="padding: 10px 14px;"><p style="font-size: 10px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: rgba(255,255,255,0.55); margin: 0;">Total score</p></div>
+              <div style="padding: 10px 14px; border-left: 1px solid rgba(255,255,255,0.12);"><p style="font-size: 10px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: rgba(255,255,255,0.55); margin: 0;">Combined value</p></div>
+              <div style="padding: 10px 14px; border-left: 1px solid rgba(255,255,255,0.12);"><p style="font-size: 10px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: rgba(255,255,255,0.55); margin: 0;">Priority tier</p></div>
+            </div>
+            <sc-for list="{{ valueBands }}" as="b" hint-placeholder-count="5">
+              <div style="{{ b.rowStyle }}">
+                <div style="{{ b.cellStyle }}">{{ b.range }}</div>
+                <div style="{{ b.cellStyle }}">{{ b.value }}</div>
+                <div style="{{ b.subStyle }}">{{ b.tier }}</div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+
+        <!-- Step 3: RICE matrix -->
+        <div style="background: white; border: 1px solid #DDDEE6; border-top: 3px solid #000F46; border-radius: 0 0 2px 2px; padding: 22px 24px; margin-bottom: 16px;">
+          <div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: 6px;">
+            <span style="font-family: 'Fraunces', Georgia, serif; font-weight: 400; font-size: 15px; color: #9FB825; font-variation-settings: 'SOFT' 50, 'WONK' 0, 'opsz' 72;">Step 3</span>
+            <h3 style="font-family: 'Fraunces', Georgia, serif; font-weight: 300; font-size: 20px; color: #000F46; margin: 0; font-variation-settings: 'SOFT' 50, 'WONK' 0, 'opsz' 72;">RICE = value ÷ effort</h3>
+          </div>
+          <p style="font-size: 14px; color: #4A4E63; margin: 0 0 18px; line-height: 1.6; max-width: 720px;">Effort is captured with the three-question estimate on the Score tab and mapped to a T-shirt size (XS–XXL). The Combined value is then divided by that effort using the table below: the same value delivers a higher RICE score when the job is smaller, pushing quick wins up the queue. The <span style="color: #000F46; font-weight: 700;">navy cell</span> is this backlog item.</p>
+          <div style="border: 1px solid #DDDEE6; border-radius: 2px; overflow: hidden; max-width: 700px;">
+            <!-- header -->
+            <div style="display: grid; grid-template-columns: 132px repeat(5, 1fr); background: #000F46;">
+              <div style="padding: 10px 14px;"><p style="font-size: 10px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: rgba(255,255,255,0.55); margin: 0;">Effort ↓ / Value →</p></div>
+              <div style="padding: 10px 6px; text-align: center; border-left: 1px solid rgba(255,255,255,0.12);"><p style="font-size: 12px; font-weight: 700; color: #fff; margin: 0;">3</p></div>
+              <div style="padding: 10px 6px; text-align: center; border-left: 1px solid rgba(255,255,255,0.12);"><p style="font-size: 12px; font-weight: 700; color: #fff; margin: 0;">5</p></div>
+              <div style="padding: 10px 6px; text-align: center; border-left: 1px solid rgba(255,255,255,0.12);"><p style="font-size: 12px; font-weight: 700; color: #fff; margin: 0;">8</p></div>
+              <div style="padding: 10px 6px; text-align: center; border-left: 1px solid rgba(255,255,255,0.12);"><p style="font-size: 12px; font-weight: 700; color: #fff; margin: 0;">13</p></div>
+              <div style="padding: 10px 6px; text-align: center; border-left: 1px solid rgba(255,255,255,0.12);"><p style="font-size: 12px; font-weight: 700; color: #fff; margin: 0;">20</p></div>
+            </div>
+            <div style="display: grid; grid-template-columns: 132px repeat(5, 1fr);">
+              <sc-for list="{{ riceCells }}" as="c" hint-placeholder-count="36">
+                <div style="{{ c.style }}">{{ c.text }}</div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+
+        <!-- Complexity note -->
+        <div style="background: #F7F7F4; border: 1px solid #DDDEE6; border-left: 3px solid #FFD629; border-radius: 0 2px 2px 0; padding: 18px 22px;">
+          <h3 style="font-family: 'Fraunces', Georgia, serif; font-weight: 300; font-size: 18px; color: #000F46; margin: 0 0 8px; font-variation-settings: 'SOFT' 50, 'WONK' 0, 'opsz' 72;">How the effort size is chosen</h3>
+          <p style="font-size: 14px; color: #4A4E63; margin: 0; line-height: 1.6; max-width: 780px;">Complexity is not a separate number — the story point already captures it. The three effort answers (task knowledge, dependencies and work effort) are averaged into a size, rounding up to the larger size when the average falls between two. Items that land on XL (8 pts) should be split into smaller stories, and XXL (13 pts) items must be split before they are committed to a sprint. See the <strong>Effort guide</strong> tab for the full cheat sheet.</p>
+        </div>
+
+      </div>
+    </sc-if>
+
+    <!-- ── QUESTIONNAIRE TAB ── -->
+    <sc-if value="{{ showQuestionnaire }}" hint-placeholder-val="{{ false }}">
+      <div style="padding: 32px 0; animation: tabIn 180ms cubic-bezier(0.2,0,0.1,1);">
+        <h2 style="font-family: 'Fraunces', Georgia, serif; font-weight: 300; font-size: 22px; color: #000F46; margin: 0 0 6px; font-variation-settings: 'SOFT' 50, 'WONK' 0, 'opsz' 72;">Discovery questionnaire</h2>
+        <p style="font-size: 14px; color: #4A4E63; margin: 0 0 24px;">Use these questions when gathering information to rate Reach, Impact and Effort accurately.</p>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+          <sc-for list="{{ questionSections }}" as="qs" hint-placeholder-count="5">
+            <div style="background: white; border: 1px solid #DDDEE6; border-radius: 2px; overflow: hidden;">
+              <div style="padding: 13px 18px; background: #000F46;">
+                <p style="font-size: 10px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: rgba(255,255,255,0.45); margin: 0 0 2px;">Rating · {{ qs.criteria }}</p>
+                <p style="font-size: 15px; font-weight: 600; color: white; margin: 0;">{{ qs.title }}</p>
+              </div>
+              <div style="padding: 14px 18px; display: flex; flex-direction: column; gap: 12px;">
+                <sc-for list="{{ qs.questions }}" as="q" hint-placeholder-count="3">
+                  <div>
+                    <p style="font-size: 13px; font-weight: 700; color: #000F46; margin: 0 0 3px;">{{ q.label }}</p>
+                    <p style="font-size: 13px; color: #4A4E63; margin: 0; line-height: 1.5;">{{ q.text }}</p>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </sc-if>
+
+    <!-- ── TEAM TAB ── -->
+    <sc-if value="{{ showTeam }}" hint-placeholder-val="{{ false }}">
+      <div style="padding: 32px 0; animation: tabIn 180ms cubic-bezier(0.2,0,0.1,1);">
+        <h2 style="font-family: 'Fraunces', Georgia, serif; font-weight: 300; font-size: 22px; color: #000F46; margin: 0 0 6px; font-variation-settings: 'SOFT' 50, 'WONK' 0, 'opsz' 72;">Team engagement</h2>
+        <p style="font-size: 14px; color: #4A4E63; margin: 0 0 24px;">Track who needs to be engaged and the current status.</p>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+          <div style="background: white; border: 1px solid #DDDEE6; border-radius: 2px; padding: 18px 20px;">
+            <label style="display: block; font-size: 10px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: #8589A0; margin-bottom: 7px;">Who needs to be engaged?</label>
+            <textarea value="{{ engageList }}" onchange="{{ setEngageList }}" rows="5" placeholder="List all parties who need to be engaged for this backlog item..."></textarea>
+          </div>
+          <div style="background: white; border: 1px solid #DDDEE6; border-radius: 2px; padding: 18px 20px;">
+            <label style="display: block; font-size: 10px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: #8589A0; margin-bottom: 7px;">Primary stakeholder</label>
+            <input type="text" value="{{ primaryStakeholder }}" onchange="{{ setPrimaryStakeholder }}" placeholder="Who is the primary stakeholder?">
+          </div>
+          <div style="background: white; border: 1px solid #DDDEE6; border-radius: 2px; padding: 18px 20px;">
+            <label style="display: block; font-size: 10px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: #8589A0; margin-bottom: 7px;">Engagement status</label>
+            <select value="{{ stakeholdersDone }}" onchange="{{ setStakeholdersDone }}">
+              <option value="Not Done">Not done</option>
+              <option value="In Progress">In progress</option>
+              <option value="Done">Done</option>
+            </select>
+          </div>
+          <div style="background: white; border: 1px solid #DDDEE6; border-radius: 2px; padding: 18px 20px;">
+            <label style="display: block; font-size: 10px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: #8589A0; margin-bottom: 7px;">Met with stakeholders?</label>
+            <select value="{{ metWithStakeholders }}" onchange="{{ setMetWith }}">
+              <option value="No">No</option>
+              <option value="Scheduled">Scheduled</option>
+              <option value="Yes">Yes</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+
+    <!-- ── EFFORT GUIDE TAB ── -->
+    <sc-if value="{{ showEffortGuide }}" hint-placeholder-val="{{ false }}">
+      <div style="padding: 32px 0; animation: tabIn 180ms cubic-bezier(0.2,0,0.1,1);">
+        <h2 style="font-family: 'Fraunces', Georgia, serif; font-weight: 300; font-size: 22px; color: #000F46; margin: 0 0 6px; font-variation-settings: 'SOFT' 50, 'WONK' 0, 'opsz' 72;">Story point estimation guide</h2>
+        <p style="font-size: 14px; color: #4A4E63; margin: 0 0 24px; max-width: 800px; line-height: 1.6;">A shared reference for sizing backlog items. Read down each column — the three answers line up to a story point. The <span style="color: #000F46; font-weight: 700;">highlighted column</span> is this backlog item&rsquo;s current size.</p>
+        <div style="border: 1px solid #DDDEE6; border-radius: 2px; overflow: hidden; max-width: 940px;">
+          <div style="display: grid; grid-template-columns: 210px repeat(6, 1fr); background: #000F46;">
+            <div style="padding: 12px 16px;"><p style="font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.55); margin: 0;">Size</p></div>
+            <sc-for list="{{ guideCols }}" as="c" hint-placeholder-count="6">
+              <div style="{{ c.headStyle }}">{{ c.moniker }}</div>
+            </sc-for>
+          </div>
+          <div style="display: grid; grid-template-columns: 210px repeat(6, 1fr);">
+            <div style="padding: 12px 16px; display: flex; align-items: center; font-size: 13px; font-weight: 700; color: #000F46; background: #F7F7F4; border-top: 1px solid #DDDEE6;">How much is known about the task</div>
+            <sc-for list="{{ guideCols }}" as="c" hint-placeholder-count="6">
+              <div style="{{ c.cellStyle }}">{{ c.knowledge }}</div>
+            </sc-for>
+          </div>
+          <div style="display: grid; grid-template-columns: 210px repeat(6, 1fr);">
+            <div style="padding: 12px 16px; display: flex; align-items: center; font-size: 13px; font-weight: 700; color: #000F46; background: #F7F7F4; border-top: 1px solid #DDDEE6;">Dependencies</div>
+            <sc-for list="{{ guideCols }}" as="c" hint-placeholder-count="6">
+              <div style="{{ c.cellStyle }}">{{ c.dependencies }}</div>
+            </sc-for>
+          </div>
+          <div style="display: grid; grid-template-columns: 210px repeat(6, 1fr);">
+            <div style="padding: 12px 16px; display: flex; align-items: center; font-size: 13px; font-weight: 700; color: #000F46; background: #F7F7F4; border-top: 1px solid #DDDEE6;">How much work effort</div>
+            <sc-for list="{{ guideCols }}" as="c" hint-placeholder-count="6">
+              <div style="{{ c.cellStyle }}">{{ c.work }}</div>
+            </sc-for>
+          </div>
+          <div style="display: grid; grid-template-columns: 210px repeat(6, 1fr);">
+            <div style="padding: 12px 16px; display: flex; align-items: center; font-size: 13px; font-weight: 700; color: #000F46; background: #F7F7F4; border-top: 1px solid #DDDEE6;">Story points</div>
+            <sc-for list="{{ guideCols }}" as="c" hint-placeholder-count="6">
+              <div style="{{ c.pointStyle }}">{{ c.points }}</div>
+            </sc-for>
+          </div>
+        </div>
+        <div style="display: flex; gap: 12px; margin-top: 18px; flex-wrap: wrap;">
+          <div style="flex: 1; min-width: 260px; background: rgba(255,214,41,0.12); border: 1px solid #DDDEE6; border-left: 3px solid #FFD629; border-radius: 0 2px 2px 0; padding: 14px 18px;">
+            <p style="font-size: 13px; font-weight: 700; color: #000F46; margin: 0 0 3px;">8 pts &middot; XL &mdash; should be split</p>
+            <p style="font-size: 13px; color: #4A4E63; margin: 0; line-height: 1.5;">On the large side. Consider breaking it into smaller stories before committing.</p>
+          </div>
+          <div style="flex: 1; min-width: 260px; background: rgba(255,45,60,0.07); border: 1px solid #DDDEE6; border-left: 3px solid #FF2D3C; border-radius: 0 2px 2px 0; padding: 14px 18px;">
+            <p style="font-size: 13px; font-weight: 700; color: #000F46; margin: 0 0 3px;">13 pts &middot; XXL &mdash; must be split</p>
+            <p style="font-size: 13px; color: #4A4E63; margin: 0; line-height: 1.5;">Too large to deliver reliably in one sprint. Split it into smaller stories first.</p>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+
+    <!-- ── GLOSSARY TAB ── -->
+    <sc-if value="{{ showGlossary }}" hint-placeholder-val="{{ false }}">
+      <div style="padding: 32px 0; animation: tabIn 180ms cubic-bezier(0.2,0,0.1,1);">
+        <h2 style="font-family: 'Fraunces', Georgia, serif; font-weight: 300; font-size: 22px; color: #000F46; margin: 0 0 6px; font-variation-settings: 'SOFT' 50, 'WONK' 0, 'opsz' 72;">Glossary</h2>
+        <p style="font-size: 14px; color: #4A4E63; margin: 0 0 24px;">Key terms and methodology used throughout this tool.</p>
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <sc-for list="{{ glossaryTerms }}" as="term" hint-placeholder-count="5">
+            <div style="background: white; border: 1px solid #DDDEE6; border-radius: 2px; display: grid; grid-template-columns: 220px 1fr; overflow: hidden;">
+              <div style="padding: 16px 20px; background: #F7F7F4; border-right: 1px solid #DDDEE6;">
+                <p style="font-size: 14px; font-weight: 700; color: #000F46; margin: 0 0 3px;">{{ term.title }}</p>
+                <p style="font-size: 11px; color: #8589A0; margin: 0;">{{ term.category }}</p>
+              </div>
+              <p style="font-size: 14px; color: #4A4E63; margin: 0; line-height: 1.6; padding: 16px 20px;">{{ term.definition }}</p>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </sc-if>
+
+  </div>
+
+  <!-- ══════ FOOTER ══════ -->
+  <div style="background: #000F46; padding: 16px 48px; display: flex; justify-content: space-between; align-items: center; margin-top: 24px; flex-shrink: 0;">
+    <p style="font-size: 12px; color: rgba(255,255,255,0.35); margin: 0;">Quick Assessment · Simplified RICE prioritisation</p>
+    <p style="font-size: 12px; color: rgba(255,255,255,0.25); margin: 0;"></p>
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script="">
+class Component extends DCLogic {
+
+  STORAGE_KEY = 'uom-quick-assessment-v1';
+
+  CRITERIA = [
+    { key: 'reach',  name: 'Reach',  tagline: 'Usage, efficiency and experience',
+      highDesc: 'Frequent, high-volume use with major efficiency and experience gains',
+      medDesc:  'Moderate use with reasonable efficiency and experience gains',
+      lowDesc:  'Occasional use with minor efficiency or experience gains' },
+    { key: 'impact', name: 'Impact', tagline: 'Who and how many benefit',
+      highDesc: 'All or the majority of staff, students and/or service providers benefit',
+      medDesc:  'Several groups, or one substantially sized group, benefit',
+      lowDesc:  'A single or small group benefits' },
+    { key: 'urgency', name: 'Urgency', tagline: 'Timing pressure',
+      highDesc: 'Non-negotiable senior directive, capital project or immovable deadline',
+      medDesc:  'No defined deadline, but as soon as practical with business justification',
+      lowDesc:  'No project timeline, no defined deadline, no immovable target' },
+    { key: 'risk',   name: 'Risk',   tagline: 'Risk reduction',
+      highDesc: 'Many failures or near-misses, major impact, possible security compromise',
+      medDesc:  'Some failures, some negative impact, manageable with a workaround',
+      lowDesc:  'Almost no failures, minor annoyances only' }
+  ];
+
+  COMPLEXITY_SCENARIOS = [
+    { value: 'No development required', complexity: 'Low',    minBenefit: 'Low',    desc: 'No technical impact to the team or application.' },
+    { value: 'Minor Configuration',     complexity: 'Low',    minBenefit: 'Low',    desc: 'Will typically not delay upgrades or new functionality.' },
+    { value: 'Minor Enhancement',       complexity: 'Low',    minBenefit: 'Low',    desc: 'Will typically not delay upgrades or new functionality.' },
+    { value: 'Configuration',           complexity: 'Low',    minBenefit: 'Low',    desc: 'Will typically not delay upgrades or new functionality.' },
+    { value: 'Minor Customisation',     complexity: 'Medium', minBenefit: 'Medium', desc: 'Typically will not delay upgrades, but risks service experience.' },
+    { value: 'Customisation',           complexity: 'Medium', minBenefit: 'Medium', desc: 'Typically will not delay upgrades, but risks service experience.' },
+    { value: 'Enhancement',             complexity: 'Medium', minBenefit: 'Medium', desc: 'Typically will not delay upgrades, but risks service experience.' },
+    { value: 'Major Configuration',     complexity: 'Medium', minBenefit: 'Medium', desc: 'Typically will not delay upgrades, but risks service experience.' },
+    { value: 'Major Enhancement',       complexity: 'Medium', minBenefit: 'Medium', desc: 'Typically will not delay upgrades, but risks service experience.' },
+    { value: 'Major Customisation',     complexity: 'High',   minBenefit: 'High',   desc: 'Complexity is dependent on the extent of development required.' },
+    { value: 'New Feature',             complexity: 'High',   minBenefit: 'High',   desc: 'Complexity is dependent on the extent of development required.' },
+    { value: 'New Application',         complexity: 'High',   minBenefit: 'High',   desc: 'Complexity is dependent on the extent of development required.' }
+  ];
+
+  QUESTION_SECTIONS = [
+    { title: 'Reach — usage and efficiency', criteria: 'Reach', questions: [
+      { label: '1. Frequency of use', text: 'How many times would this solution be used, or what is the frequency of its actions on a weekly basis? Provide a quantifiable amount where possible (e.g. 10, 22).' },
+      { label: '2. Current process duration', text: 'How long does it currently take each time the business process occurs? Provide a quantifiable amount where possible (e.g. minutes, hours).' },
+      { label: '3. Efficiency and experience gains', text: 'What time or manual effort would the solution save each time it is used, and how much would it improve the user experience?' }
+    ]},
+    { title: 'Impact — who benefits', criteria: 'Impact', questions: [
+      { label: '1. Audience', text: 'Describe the audience for this solution. Which cohort of the University — staff, students, service providers? Who are the customers for this product?' },
+      { label: '2. Breadth of benefit', text: 'How many people or groups benefit — all or the majority of a cohort, several groups, or a single small group?' },
+      { label: '3. Other value considerations', text: 'Is there any other reason that should be considered when identifying the value of this opportunity?' }
+    ]},
+    { title: 'Urgency — timing pressure', criteria: 'Urgency', questions: [
+      { label: '1. Capital funded or formalised project', text: 'Is this a capital funded or formalised project? If yes, which programme or committee has approved it (e.g. SLIG, TSGG)?' },
+      { label: '2. Deadline', text: 'Is there a deadline for this work to be completed? If yes, what happens if the deadline cannot be achieved?' }
+    ]},
+    { title: 'Risk — risk reduction', criteria: 'Risk', questions: [
+      { label: '1. Existing process risk', text: 'Is there a major risk that currently exists within the process or systems? Describe its impact and likelihood (e.g. unlikely, likely, very likely).' },
+      { label: '2. Legal or compliance obligation', text: 'Is there a legal or compliance obligation that needs to be met? Describe the obligation and the impact if this item is not fulfilled.' }
+    ]},
+    { title: 'Effort — size of the job', criteria: 'Effort', questions: [
+      { label: '1. How much is known about the task', text: 'How well is the work understood — everything, something, or almost nothing? The less that is known, the larger the estimate.' },
+      { label: '2. Dependencies', text: 'How many dependencies does this item have on other teams, systems or work — none, some, or unknown?' },
+      { label: '3. How much work effort', text: 'Roughly how much hands-on effort is expected — from less than two hours up to more than a week?' }
+    ]}
+  ];
+
+  GLOSSARY_TERMS = [
+    { title: 'Reach',              category: 'Value factor',         definition: 'A single High/Medium/Low rating for usage, efficiency and experience — how heavily the solution is used and the time or manual effort it saves. Higher reach means more people or transactions are touched more often.' },
+    { title: 'Impact',             category: 'Value factor',         definition: 'A single High/Medium/Low rating for how broadly recipients benefit across staff, students and service providers. High = all or the majority of a cohort; Low = a single small group.' },
+    { title: 'Urgency',            category: 'Value factor',         definition: 'A single High/Medium/Low rating for timing pressure. High = a non-negotiable directive, capital project or immovable deadline; Low = no defined timeline or deadline.' },
+    { title: 'Risk',               category: 'Value modifier',       definition: 'A High/Medium/Low rating for risk reduction, applied as a percentage modifier on the combined value: High = 100%, Medium = 80%, Low and N/A = 50%. Lower-risk work is discounted rather than inflated.' },
+    { title: 'Combined value',     category: 'Intermediate output', definition: 'A numeric score (3, 5, 8, 13 or 20) mapped from (Reach + Impact + Urgency, each 0–3) multiplied by the Risk modifier — a total of 0–9. 8–9 points = 20 (Critical); 0–1 points = 3 (Minimal).' },
+    { title: 'RICE score',         category: 'Output',              definition: 'The prioritisation score: Combined value divided by the Effort T-shirt size. Higher RICE scores deliver more value sooner relative to effort — prioritise these first.' },
+    { title: 'Effort size',        category: 'Effort estimate',     definition: 'A relative story-point size from three signals — how much is known about the task, its dependencies, and the hands-on work effort. The three answers are averaged into a size, rounding up to the larger size when the average falls between two. XS = 1, S = 2, M = 3, L = 5, XL = 8, XXL = 13 story points.' },
+    { title: 'Splitting items',    category: 'Effort estimate',     definition: 'Large items are hard to estimate and deliver reliably. An item sized XL (8 pts) should be split into smaller stories; an item sized XXL (13 pts) must be split before it is committed to a sprint.' }
+  ];
+
+  // ── blank initiative template ──
+
+  blankInitiative() {
+    return {
+      id: 'init-' + Date.now() + '-' + Math.random().toString(36).slice(2, 6),
+      lastModified: Date.now(),
+      initiativeName: '', businessArea: '', ticketNumber: '', requestor: '',
+      priority: 'Standard', idealDate: '', dependencies: '',
+      scores: { reach: 0, impact: 0, urgency: 0, risk: 0 },
+      effortKnowledge: 2, effortDependencies: 2, effortWork: 2,
+      engageList: '', primaryStakeholder: '', stakeholdersDone: 'Not Done', metWithStakeholders: 'No'
+    };
+  }
+
+  state = { activeTab: 'score', showDropdown: false, confirmDeleteId: null, currentId: null, initiatives: [] };
+
+  fileInputRef = React.createRef();
+
+  exportData() {
+    const { initiatives } = this.state;
+    const payload = JSON.stringify({ initiatives }, null, 2);
+    const blob = new Blob([payload], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    const date = new Date();
+    const stamp = date.getFullYear() + '-' + String(date.getMonth()+1).padStart(2,'0') + '-' + String(date.getDate()).padStart(2,'0');
+    a.href = url;
+    a.download = 'quick-assessment-data-' + stamp + '.json';
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  triggerImport() {
+    if (this.fileInputRef.current) this.fileInputRef.current.click();
+  }
+
+  importData(e) {
+    const file = e.target.files && e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      try {
+        const data = JSON.parse(ev.target.result);
+        if (!data || !Array.isArray(data.initiatives) || data.initiatives.length === 0) {
+          alert('This file does not appear to be a valid Quick Assessment export.');
+          return;
+        }
+        const sorted = [...data.initiatives].sort((a, b) => (b.lastModified||0) - (a.lastModified||0));
+        this.persist(data.initiatives);
+        this.setState({ initiatives: data.initiatives, currentId: sorted[0].id });
+        alert('Data imported successfully — ' + data.initiatives.length + ' backlog item(s) loaded.');
+      } catch(err) {
+        alert('Could not read file. Make sure it is a valid JSON export from this tool.');
+      }
+    };
+    reader.readAsText(file);
+    e.target.value = '';
+  }
+
+  printConsolidated() {
+    const curr = this.state.initiatives.find(i => i.id === this.state.currentId);
+    if (!curr) return;
+    const s = curr.scores || {};
+    const esc = (t) => (t==null?'':String(t)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+
+    const reachRating     = this.calcRating(s.reach||0);
+    const impactRating    = this.calcRating(s.impact||0);
+    const urgencyRating   = this.calcRating(s.urgency||0);
+    const riskRating      = this.calcRating(s.risk||0);
+    const valueScore      = this.calcCombinedValue(s);
+    const tShirt          = this.calcTShirtSize(curr);
+    const effortPts       = this.calcEffortPoints(curr);
+    const rice            = this.calcRICE(valueScore, tShirt);
+    const combinedRating  = this.calcCombinedRating(s);
+    const advice          = this.splitAdvice(effortPts);
+    const justText        = advice==='must' ? 'Must be split into smaller items' : advice==='should' ? 'Should be split into smaller items' : 'Sized and ready to schedule';
+
+    const RC = { High:['#9FB825','#fff'], Medium:['#FFD629','#5a2d00'], Low:['#D8D8D8','#2D2D2D'], 'N/A':['#F2F3F7','#8589A0'] };
+    const pill = (label) => { const c = RC[label]||RC['N/A']; return '<span style="display:inline-block;padding:2px 11px;border-radius:999px;background:'+c[0]+';color:'+c[1]+';font-size:12px;font-weight:700;">'+label+'</span>'; };
+
+    const critRows = this.CRITERIA.map(c => {
+      const lbl = this.calcRating(s[c.key]||0);
+      return '<tr><td style="padding:8px 12px;border-bottom:1px solid #DDDEE6;font-size:13px;color:#000F46;font-weight:600;">'+esc(c.name)+'</td>'
+           + '<td style="padding:8px 12px;border-bottom:1px solid #DDDEE6;font-size:12px;color:#8589A0;">'+esc(c.tagline)+'</td>'
+           + '<td style="padding:8px 12px;border-bottom:1px solid #DDDEE6;text-align:right;">'+pill(lbl)+'</td></tr>';
+    }).join('');
+
+    const summaryCell = (label, value, sub) => '<div style="border:1px solid #DDDEE6;border-top:3px solid #000F46;padding:8px 12px;">'
+      + '<div style="font-size:9px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#8589A0;margin-bottom:4px;">'+label+'</div>'
+      + '<div style="font-size:18px;font-weight:700;color:#000F46;line-height:1;">'+value+'</div>'
+      + (sub?'<div style="font-size:10px;color:#8589A0;margin-top:3px;">'+sub+'</div>':'')+'</div>';
+
+    const metaRow = (label, val) => '<div style="padding:8px 0;border-bottom:1px solid #EBECF0;display:flex;justify-content:space-between;gap:16px;">'
+      + '<span style="font-size:11px;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;color:#8589A0;">'+label+'</span>'
+      + '<span style="font-size:13px;color:#000F46;text-align:right;">'+(val&&String(val).trim()?esc(val):'&mdash;')+'</span></div>';
+
+    const title = curr.initiativeName || 'Untitled backlog item';
+    const printed = new Date().toLocaleDateString('en-AU', { day:'numeric', month:'long', year:'numeric' });
+
+    const doc = '<!DOCTYPE html><html><head><meta charset="utf-8"><title>'+esc(title)+' — Quick Assessment</title>'
+      + '<style>'
+      + '@page{size:A4;margin:10mm;}'
+      + '*{box-sizing:border-box;}'
+      + 'body{margin:0;font-family:Arial,Helvetica,sans-serif;color:#000F46;-webkit-print-color-adjust:exact;print-color-adjust:exact;}'
+      + 'h1,h2{font-family:Georgia,\'Times New Roman\',serif;font-weight:400;}'
+      + '.section-title{font-family:Georgia,serif;font-size:16px;color:#000F46;margin:0 0 8px;padding-bottom:5px;border-bottom:2px solid #000F46;}'
+      + '.toolbar{position:fixed;top:0;left:0;right:0;background:#F2F3F7;border-bottom:1px solid #DDDEE6;padding:10px 16px;text-align:right;}'
+      + '.toolbar button{font:600 13px Arial;background:#000F46;color:#fff;border:none;border-radius:2px;padding:8px 18px;cursor:pointer;margin-left:8px;}'
+      + '.toolbar button.ghost{background:#fff;color:#000F46;border:1px solid #000F46;}'
+      + '.sheet{max-width:800px;margin:0 auto;padding:24px 20px 60px;}'
+      + '@media print{.toolbar{display:none;}.sheet{padding:0;max-width:none;}}'
+      + '</style></head><body>'
+      + '<div class="toolbar"><button class="ghost" onclick="window.close()">Close</button><button onclick="window.print()">Print / Save as PDF</button></div>'
+      + '<div class="sheet" style="margin-top:8px;">'
+      + '<div style="background:#000F46;color:#fff;padding:15px 22px;border-radius:2px;margin-bottom:14px;">'
+      + '<div style="font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.5);margin-bottom:8px;">Quick Assessment · RICE</div>'
+      + '<div style="display:flex;justify-content:space-between;align-items:flex-end;gap:20px;">'
+      + '<h1 style="margin:0;font-size:24px;color:#fff;line-height:1.15;">'+esc(title)+'</h1>'
+      + '<div style="text-align:center;flex-shrink:0;"><div style="font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.5);">RICE</div>'
+      + '<div style="font-family:Georgia,serif;font-size:32px;line-height:1;color:#fff;">'+rice+'</div></div></div></div>'
+      + '<div style="display:grid;grid-template-columns:1fr 1fr;gap:0 32px;margin-bottom:14px;">'
+      + '<div>'+metaRow('Business area', curr.businessArea)+metaRow('Ticket number', curr.ticketNumber)+metaRow('Requestor', curr.requestor)+'</div>'
+      + '<div>'+metaRow('Priority', curr.priority)+metaRow('Ideal date', curr.idealDate)+metaRow('Deadlines / dependencies', curr.dependencies)+'</div>'
+      + '</div>'
+      + '<h2 class="section-title">RICE score model</h2>'
+      + '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px;">'
+      + summaryCell('Reach', reachRating, 'Usage & efficiency')
+      + summaryCell('Impact', impactRating, 'Breadth of benefit')
+      + summaryCell('Urgency', urgencyRating, 'Timing pressure')
+      + summaryCell('Risk', riskRating, 'Risk reduction')
+      + summaryCell('Combined value', valueScore, '(R+I+U) &#215; Risk')
+      + summaryCell('Effort', tShirt+' \u00b7 '+effortPts+' pts', 'Story points')
+      + summaryCell('RICE', rice, justText)
+      + '</div>'
+      + '<table style="width:100%;border-collapse:collapse;border:1px solid #DDDEE6;margin-bottom:24px;"><thead><tr style="background:#F7F7F4;">'
+      + '<th style="text-align:left;padding:8px 12px;font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:#8589A0;border-bottom:1px solid #DDDEE6;">Factor</th>'
+      + '<th style="text-align:left;padding:8px 12px;font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:#8589A0;border-bottom:1px solid #DDDEE6;">Definition</th>'
+      + '<th style="text-align:right;padding:8px 12px;font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:#8589A0;border-bottom:1px solid #DDDEE6;">Rating</th></tr></thead><tbody>'
+      + critRows + '</tbody></table>'
+      + '<h2 class="section-title" style="margin-top:0;">Team engagement</h2>'
+      + '<div style="margin-bottom:14px;">'
+      + metaRow('Primary stakeholder', curr.primaryStakeholder)
+      + metaRow('Engagement status', curr.stakeholdersDone)
+      + metaRow('Met with stakeholders', curr.metWithStakeholders)
+      + '</div>'
+      + '<div style="border:1px solid #DDDEE6;border-radius:2px;padding:14px 16px;margin-bottom:12px;"><div style="font-size:13px;font-weight:700;color:#000F46;margin-bottom:6px;">Who needs to be engaged</div>'
+      + '<div style="font-size:13px;color:#333;line-height:1.55;">'+(curr.engageList&&curr.engageList.trim()?esc(curr.engageList).replace(/\n/g,'<br>'):'<span style="color:#B4B7C4;">Not provided</span>')+'</div></div>'
+      + '<div style="margin-top:14px;padding-top:10px;border-top:1px solid #DDDEE6;font-size:11px;color:#8589A0;">Generated '+printed+'</div>'
+      + '</div></body></html>';
+
+    const w = window.open('', '_blank');
+    if (!w) { alert('Please allow pop-ups for this page to generate the PDF.'); return; }
+    w.document.open();
+    w.document.write(doc);
+    w.document.close();
+  }
+
+  componentDidMount() {
+    try {
+      const raw = localStorage.getItem(this.STORAGE_KEY);
+      if (raw) {
+        const data = JSON.parse(raw);
+        if (data && data.initiatives && data.initiatives.length > 0) {
+          const sorted = [...data.initiatives].sort((a, b) => (b.lastModified || 0) - (a.lastModified || 0));
+          this.setState({ initiatives: data.initiatives, currentId: sorted[0].id });
+          return;
+        }
+      }
+    } catch (e) { /* localStorage unavailable or corrupt — start fresh */ }
+    const init = this.blankInitiative();
+    this.setState({ initiatives: [init], currentId: init.id });
+  }
+
+  persist(initiatives) {
+    try { localStorage.setItem(this.STORAGE_KEY, JSON.stringify({ initiatives })); } catch(e) {}
+  }
+
+  // ── state helpers ──
+
+  updateCurrentField(field, value) {
+    const id = this.state.currentId;
+    const initiatives = this.state.initiatives.map(i =>
+      i.id === id ? { ...i, [field]: value, lastModified: Date.now() } : i
+    );
+    this.setState({ initiatives });
+    this.persist(initiatives);
+  }
+
+  switchToInitiative(id) {
+    this.setState({ currentId: id, showDropdown: false });
+  }
+
+  deleteInitiative(id) {
+    const { initiatives, confirmDeleteId } = this.state;
+    if (initiatives.length <= 1) return;
+    if (confirmDeleteId !== id) {
+      this.setState({ confirmDeleteId: id });
+      return;
+    }
+    const remaining = initiatives.filter(i => i.id !== id);
+    const newCurrentId = id === this.state.currentId ? remaining[remaining.length - 1].id : this.state.currentId;
+    this.setState({ initiatives: remaining, currentId: newCurrentId, showDropdown: false, confirmDeleteId: null });
+    this.persist(remaining);
+  }
+
+  // ── scoring ──
+
+  calcRating(score) {
+    return score===0?'N/A':score===1?'Low':score===2?'Medium':'High';
+  }
+  riskFactor(score) {
+    // Risk applied as a percentage modifier: High 100%, Medium 80%, Low/N/A 50%
+    return score===3 ? 1 : score===2 ? 0.8 : 0.5;
+  }
+  calcBaseSum(scores) {
+    return (scores.reach||0)+(scores.impact||0)+(scores.urgency||0);
+  }
+  calcModifiedValue(scores) {
+    return Math.round(this.calcBaseSum(scores) * this.riskFactor(scores.risk||0));
+  }
+  calcCombinedValue(scores) {
+    const v = this.calcModifiedValue(scores);
+    if (v >= 8) return 20;
+    if (v >= 6) return 13;
+    if (v >= 4) return 8;
+    if (v >= 2) return 5;
+    return 3;
+  }
+  calcCombinedRating(scores) {
+    const v = this.calcModifiedValue(scores);
+    if (v === 0) return 'N/A';
+    if (v >= 6)  return 'High';
+    if (v >= 3)  return 'Medium';
+    return 'Low';
+  }
+  calcBaseComplexity(scenario) {
+    const sc = this.COMPLEXITY_SCENARIOS.find(s => s.value === scenario); return sc?sc.complexity:'Low';
+  }
+  calcFinalComplexity(scenario, modifier) {
+    const base = this.calcBaseComplexity(scenario);
+    if (modifier !== 'Complex') return base;
+    return base==='Low'?'Medium':'High';
+  }
+  EFFORT_POINTS = [1,2,3,5,8,13];
+  EFFORT_MONIKERS = ['XS','S','M','L','XL','XXL'];
+  EFFORT_LABELS = {
+    knowledge: ['Everything','Almost everything','Something','Almost nothing','Nothing','Nothing at all'],
+    dependencies: ['None','Almost none','Some','Few','More than a few','Unknown'],
+    work: ['Less than 2 hours','Half a day','Up to two days','A few days','Around a week','More than one week']
+  };
+  clampIdx(n) { n = parseInt(n, 10); if (isNaN(n)) n = 2; return Math.max(0, Math.min(5, n)); }
+  calcEffortIndex(curr) {
+    const w = this.clampIdx(curr.effortWork);
+    const k = this.clampIdx(curr.effortKnowledge);
+    const d = this.clampIdx(curr.effortDependencies);
+    // Average the three answers; if it lands between two sizes, round up to the larger.
+    return Math.min(5, Math.ceil((k + d + w) / 3));
+  }
+  calcTShirtSize(curr) { return this.EFFORT_MONIKERS[this.calcEffortIndex(curr)]; }
+  calcEffortPoints(curr) { return this.EFFORT_POINTS[this.calcEffortIndex(curr)]; }
+  splitAdvice(points) { return points >= 13 ? 'must' : points >= 8 ? 'should' : 'ok'; }
+  calcRICE(v, sz) {
+    const cols=[3,5,8,13,20];
+    const tbl={XXL:[0,1,2,3,5],XL:[1,2,3,5,8],L:[2,3,5,8,13],M:[3,5,8,13,20],S:[5,8,13,20,40],XS:[8,13,20,40,80]};
+    const ci=cols.indexOf(v); const row=tbl[sz]; return(ci!==-1&&row)?row[ci]:3;
+  }
+  calcJustification(r, c) {
+    const M={High:{Low:'go',Medium:'go',High:'go'},Medium:{Low:'go',Medium:'go',High:'review'},Low:{Low:'go',Medium:'review',High:'review'},'N/A':{Low:'review',Medium:'review',High:'review'}};
+    return(M[r]&&M[r][c])?M[r][c]:'review';
+  }
+  getRICEForInit(init) {
+    const sc = init.scores||{};
+    const v = this.calcCombinedValue(sc);
+    const sz = this.calcTShirtSize(init);
+    return this.calcRICE(v, sz);
+  }
+
+  // ── style helpers ──
+
+  pillStyle(currentScore, value, level) {
+    const selected = currentScore === value;
+    const SEL = { na:{background:'#DDDEE6',color:'#4A4E63'}, low:{background:'#D8D8D8',color:'#2D2D2D'}, medium:{background:'#FFD629',color:'#5a2d00'}, high:{background:'#9FB825',color:'#ffffff'} };
+    const base = { fontFamily:"'Source Sans 3', Arial, sans-serif", fontSize:'12px', padding:'5px 8px', borderRadius:'2px', cursor:selected?'default':'pointer', flex:1, textAlign:'center', transition:'all 100ms ease', lineHeight:'1.2' };
+    return selected?{...base,...SEL[level],border:'1.5px solid '+SEL[level].background,fontWeight:700}:{...base,background:'white',color:'#8589A0',border:'1.5px solid #DDDEE6',fontWeight:400};
+  }
+  ratingColors(rating) {
+    return ({High:{bg:'#9FB825',color:'#fff'},Medium:{bg:'#FFD629',color:'#5a2d00'},Low:{bg:'#D8D8D8',color:'#2D2D2D'},'N/A':{bg:'#F2F3F7',color:'#8589A0'}})[rating]||{bg:'#F2F3F7',color:'#8589A0'};
+  }
+  tabStyle(key) {
+    const active = this.state.activeTab === key;
+    return { fontFamily:"'Source Sans 3', Arial, sans-serif", fontSize:'13px', fontWeight:active?600:400, padding:'10px 18px', background:active?'white':'transparent', color:active?'#000F46':'rgba(255,255,255,0.6)', border:'none', borderRadius:'2px 2px 0 0', cursor:active?'default':'pointer', transition:'all 150ms ease', whiteSpace:'nowrap', flexShrink:0 };
+  }
+  levelBadge(level) {
+    return ({High:{bg:'#FF2D3C',color:'#fff'},Medium:{bg:'#FFD629',color:'#5a2d00'},Low:{bg:'#D8D8D8',color:'#2D2D2D'}})[level]||{bg:'#D8D8D8',color:'#2D2D2D'};
+  }
+  formatTime(ts) {
+    if (!ts) return '';
+    const d = new Date(ts);
+    return d.getHours()+':'+String(d.getMinutes()).padStart(2,'0');
+  }
+  formatDate(ts) {
+    if (!ts) return '';
+    const d = new Date(ts); const now = new Date();
+    if (d.toDateString() === now.toDateString()) return 'Today ' + this.formatTime(ts);
+    const diff = Math.floor((now - d) / 86400000);
+    if (diff === 1) return 'Yesterday';
+    if (diff < 7) return diff + ' days ago';
+    return d.getDate()+'/'+(d.getMonth()+1)+'/'+d.getFullYear();
+  }
+
+  renderVals() {
+    const { activeTab, showDropdown, currentId, initiatives } = this.state;
+    const curr = initiatives.find(i => i.id === currentId) || this.blankInitiative();
+    const scores = curr.scores || {};
+
+    // Score calculations
+    const reachRating = this.calcRating(scores.reach||0);
+    const impactRating = this.calcRating(scores.impact||0);
+    const urgencyRating = this.calcRating(scores.urgency||0);
+    const riskRating = this.calcRating(scores.risk||0);
+    const combinedRating = this.calcCombinedRating(scores);
+    const sumTotal = this.calcModifiedValue(scores);
+    const valueScore = this.calcCombinedValue(scores);
+    const effortIdx = this.calcEffortIndex(curr);
+    const tShirtSize = this.EFFORT_MONIKERS[effortIdx];
+    const effortPoints = this.EFFORT_POINTS[effortIdx];
+    const effortSizeLabel = tShirtSize + ' \u00b7 ' + effortPoints + ' pts';
+    const rice = this.calcRICE(valueScore, tShirtSize);
+    const advice = this.splitAdvice(effortPoints);
+
+    // RICE panel
+    const riceLevel = rice>=8?'high':rice>=3?'medium':'low';
+    const WS = { high:{panelBg:'#000F46',numColor:'#ffffff',labelColor:'rgba(255,255,255,0.55)',verdict:'Prioritise'}, medium:{panelBg:'#F2F3F7',numColor:'#000F46',labelColor:'#8589A0',verdict:'Schedule'}, low:{panelBg:'#F7F7F4',numColor:'#C8C8C8',labelColor:'#8589A0',verdict:'Backlog'} }[riceLevel];
+    const ricePanelStyle   = { background:WS.panelBg, padding:'24px 20px', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', textAlign:'center' };
+    const riceEyebrowStyle = { fontSize:'10px', fontWeight:700, letterSpacing:'0.1em', textTransform:'uppercase', color:WS.labelColor, margin:'0 0 4px', fontFamily:"'Source Sans 3', Arial, sans-serif" };
+    const riceNumStyle     = { fontFamily:"'Fraunces', Georgia, serif", fontWeight:600, fontSize:'68px', lineHeight:1, color:WS.numColor, margin:0, fontVariationSettings:"'SOFT' 50, 'WONK' 0, 'opsz' 72" };
+    const riceVerdictStyle = { fontSize:'11px', fontWeight:700, letterSpacing:'0.08em', textTransform:'uppercase', color:WS.labelColor, margin:'6px 0 0', fontFamily:"'Source Sans 3', Arial, sans-serif" };
+
+    // Rating badges
+    const rR=this.ratingColors(reachRating), iR=this.ratingColors(impactRating), uR=this.ratingColors(urgencyRating), kR=this.ratingColors(riskRating);
+    const badgeBase={display:'inline-flex',alignItems:'center',gap:'5px',padding:'4px 12px',borderRadius:'999px'};
+    const txtBase={fontSize:'14px',fontWeight:700,fontFamily:"'Source Sans 3', Arial, sans-serif"};
+    const reachBadgeStyle       = {...badgeBase, background:rR.bg};
+    const reachBadgeTextStyle   = {...txtBase, color:rR.color};
+    const impactBadgeStyle      = {...badgeBase, background:iR.bg};
+    const impactBadgeTextStyle  = {...txtBase, color:iR.color};
+    const urgencyBadgeStyle     = {...badgeBase, background:uR.bg};
+    const urgencyBadgeTextStyle = {...txtBase, color:uR.color};
+    const riskBadgeStyle        = {...badgeBase, background:kR.bg};
+    const riskBadgeTextStyle    = {...txtBase, color:kR.color};
+    const effortSizeBadgeStyle = { display:'inline-flex', alignItems:'center', padding:'4px 14px', background:'#000F46', color:'#fff', borderRadius:'2px', fontSize:'14px', fontWeight:700, fontFamily:"'Source Sans 3', Arial, sans-serif", letterSpacing:'0.02em' };
+    const splitMap = { must:{ text:'\u26a0 Must be split into smaller items \u2014 13 pts (XXL) is too large to commit to a sprint.', bg:'rgba(255,45,60,0.07)', color:'#B21622', border:'#FF2D3C' }, should:{ text:'\u26a0 Should be split into smaller items \u2014 8 pts (XL) is on the large side; consider breaking it down.', bg:'rgba(255,214,41,0.14)', color:'#8a5a00', border:'#FFD629' } };
+    const splitInfo = splitMap[advice];
+    const effortSplitNote = splitInfo ? splitInfo.text : '';
+    const effortSplitNoteStyle = splitInfo ? { marginTop:'16px', padding:'11px 15px', fontSize:'13px', fontWeight:600, lineHeight:1.45, color:splitInfo.color, background:splitInfo.bg, borderLeft:'3px solid '+splitInfo.border, borderRadius:'0 2px 2px 0', fontFamily:"'Source Sans 3', Arial, sans-serif" } : { display:'none' };
+
+    // Justification
+    const JUSTMAP = { ok:{ icon:'\u2713', label:'Sized and ready to schedule', desc:'This backlog item is sized at '+effortSizeLabel+'. It is small enough to commit to a sprint.', bg:'rgba(159,184,37,0.08)', border:'#9FB825', iconBg:'#9FB825', iconColor:'#fff' }, should:{ icon:'!', label:'Should be split into smaller items', desc:'At '+effortSizeLabel+' this is on the large side. Consider breaking it into smaller stories before committing.', bg:'rgba(255,214,41,0.12)', border:'#FFD629', iconBg:'#FFD629', iconColor:'#5a2d00' }, must:{ icon:'!', label:'Must be split into smaller items', desc:'At '+effortSizeLabel+' this is too large to deliver in one sprint. Break it into smaller stories.', bg:'rgba(255,45,60,0.07)', border:'#FF2D3C', iconBg:'#FF2D3C', iconColor:'#fff' } };
+    const JUST = JUSTMAP[advice] || JUSTMAP.ok;
+    const justBannerStyle = { marginBottom:'24px', display:'flex', alignItems:'center', gap:'14px', padding:'12px 18px', background:JUST.bg, borderLeft:'3px solid '+JUST.border, borderRadius:'0 2px 2px 0' };
+    const justIconStyle   = { width:'26px', height:'26px', borderRadius:'50%', background:JUST.iconBg, color:JUST.iconColor, display:'flex', alignItems:'center', justifyContent:'center', fontSize:'14px', fontWeight:700, flexShrink:0, fontFamily:"'Source Sans 3', Arial, sans-serif" };
+
+    // Tabs
+    const tabKeys = ['score','calculations','questionnaire','team','effort-guide','glossary'];
+    const tabLabels = ['Score model','How it\u2019s calculated','Questionnaire','Team engagement','Effort guide','Glossary'];
+    const tabs = tabKeys.map((key,i) => ({
+      key, label: tabLabels[i],
+      onClick:()=>this.setState({activeTab:key}), style:this.tabStyle(key)
+    }));
+
+    // Reference matrices
+    const cellBase = { padding:'12px 6px', textAlign:'center', fontFamily:"'Source Sans 3', Arial, sans-serif", fontSize:'15px', fontWeight:700, borderLeft:'1px solid #DDDEE6', borderTop:'1px solid #DDDEE6' };
+    const rowLabelBase = { padding:'12px 14px', display:'flex', alignItems:'center', fontFamily:"'Source Sans 3', Arial, sans-serif", fontSize:'13px', fontWeight:700, color:'#000F46', background:'#F7F7F4', borderTop:'1px solid #DDDEE6' };
+
+    const bandDefs = [
+      { range:'8 – 9', value:20, tier:'Critical' },
+      { range:'6 – 7', value:13, tier:'High' },
+      { range:'4 – 5', value:8,  tier:'Medium' },
+      { range:'2 – 3', value:5,  tier:'Low' },
+      { range:'0 – 1', value:3,  tier:'Minimal' }
+    ];
+    const valueBands = bandDefs.map(b => {
+      const isActive = (b.value === valueScore && sumTotal > 0);
+      return { range:b.range, value:b.value, tier:b.tier,
+        rowStyle:  { display:'grid', gridTemplateColumns:'1fr 1fr 1fr', borderTop:'1px solid #DDDEE6', background: isActive?'#000F46':'#fff' },
+        cellStyle: { padding:'11px 14px', fontFamily:"'Source Sans 3', Arial, sans-serif", fontSize:'14px', fontWeight:700, color: isActive?'#fff':'#000F46' },
+        subStyle:  { padding:'11px 14px', fontFamily:"'Source Sans 3', Arial, sans-serif", fontSize:'13px', fontWeight:600, color: isActive?'rgba(255,255,255,0.78)':'#8589A0' } };
+    });
+
+    const riceColVals = [3,5,8,13,20];
+    const WT = { XS:[8,13,20,40,80], S:[5,8,13,20,40], M:[3,5,8,13,20], L:[2,3,5,8,13], XL:[1,2,3,5,8], XXL:[0,1,2,3,5] };
+    const riceCells = [];
+    ['XS','S','M','L','XL','XXL'].forEach(sz => {
+      riceCells.push({ text: sz, key: 'r'+sz, style: { ...rowLabelBase } });
+      WT[sz].forEach((val,ci) => {
+        const active = (sz===tShirtSize && riceColVals[ci]===valueScore);
+        riceCells.push({ text: String(val), key: sz+ci,
+          style: active ? { ...cellBase, background:'#000F46', color:'#fff' } : { ...cellBase, background:'#fff', color: val>=8?'#000F46':'#8589A0' } });
+      });
+    });
+
+    // Criteria (Reach + Impact)
+    const criteria = this.CRITERIA.map(c => {
+      const score = scores[c.key]||0;
+      const label = this.calcRating(score);
+      const badge = this.ratingColors(label);
+      return { ...c, scoreLabel:label,
+        headerStyle:      { padding:'9px 14px', background:'#F2F3F7', display:'flex', alignItems:'center', justifyContent:'space-between' },
+        nameStyle:        { fontSize:'15px', fontWeight:700, color:'#000F46', fontFamily:"'Source Sans 3', Arial, sans-serif" },
+        taglineStyle:     { fontSize:'12px', color:'#8589A0', fontFamily:"'Source Sans 3', Arial, sans-serif" },
+        scoreBadgeStyle:  { padding:'2px 10px', borderRadius:'999px', background:badge.bg, fontSize:'11px', fontWeight:700, color:badge.color, fontFamily:"'Source Sans 3', Arial, sans-serif" },
+        naStyle:   this.pillStyle(score,0,'na'),
+        lowStyle:  this.pillStyle(score,1,'low'),
+        medStyle:  this.pillStyle(score,2,'medium'),
+        highStyle: this.pillStyle(score,3,'high')
+      };
+    });
+
+    // Effort guide cheat-sheet columns
+    const guideCols = this.EFFORT_MONIKERS.map((mon, i) => {
+      const active = i === effortIdx;
+      return {
+        moniker: mon, points: this.EFFORT_POINTS[i],
+        knowledge: this.EFFORT_LABELS.knowledge[i], dependencies: this.EFFORT_LABELS.dependencies[i], work: this.EFFORT_LABELS.work[i],
+        active,
+        headStyle: { padding:'12px 8px', textAlign:'center', fontFamily:"'Source Sans 3', Arial, sans-serif", fontSize:'14px', fontWeight:700, color: active?'#fff':'#000F46', background: active?'#000F46':'#F2F3F7', borderLeft:'1px solid rgba(255,255,255,0.12)' },
+        cellStyle: { padding:'11px 8px', textAlign:'center', fontFamily:"'Source Sans 3', Arial, sans-serif", fontSize:'13px', lineHeight:1.35, color: active?'#000F46':'#4A4E63', fontWeight: active?700:400, background: active?'rgba(0,15,70,0.05)':'#fff', borderLeft:'1px solid #DDDEE6', borderTop:'1px solid #DDDEE6' },
+        pointStyle: { padding:'12px 8px', textAlign:'center', fontFamily:"'Fraunces', Georgia, serif", fontSize:'22px', fontWeight:600, color: active?'#000F46':'#8589A0', background: active?'rgba(0,15,70,0.08)':'#fff', borderLeft:'1px solid #DDDEE6', borderTop:'1px solid #DDDEE6', fontVariationSettings:"'SOFT' 50, 'WONK' 0, 'opsz' 72" }
+      };
+    });
+
+    // Initiative list for dropdown
+    const { confirmDeleteId } = this.state;
+    const initiativeList = initiatives.map(init => {
+      const w = this.getRICEForInit(init);
+      const wColor = w>=8?'#fff':w>=3?'#000F46':'#C8C8C8';
+      const wBg    = w>=8?'#000F46':w>=3?'#F2F3F7':'#F7F7F4';
+      const isActive = init.id === currentId;
+      const isArmed = confirmDeleteId === init.id;
+      const parts = [init.businessArea, this.formatDate(init.lastModified)].filter(Boolean);
+      const deleteLabel = isArmed ? 'Confirm' : '\u00D7';
+      const deleteBtnStyle = { padding:'0 14px', background: isArmed ? '#FF2D3C' : 'none', border:'none', borderLeft:'1px solid #DDDEE6', cursor: initiatives.length <= 1 ? 'default' : 'pointer', color: isArmed ? '#fff' : '#C8C8C8', fontSize: isArmed ? '11px' : '18px', fontWeight: isArmed ? 700 : 400, flexShrink:0, alignSelf:'stretch', display:'flex', alignItems:'center', fontFamily:"'Source Sans 3', Arial, sans-serif", transition:'all 150ms' };
+      return {
+        id: init.id,
+        name: init.initiativeName || 'Untitled backlog item',
+        meta: parts.join(' · '),
+        rice: w,
+        riceColor: wColor,
+        riceBadgeStyle: { display:'inline-flex', alignItems:'center', padding:'3px 10px', background:wBg, borderRadius:'2px', border:'1px solid #DDDEE6', flexShrink:0 },
+        isActive,
+        cursorStyle: isActive ? 'default' : 'pointer',
+        rowStyle: { display:'flex', alignItems:'stretch', borderBottom:'1px solid #DDDEE6', background:isActive?'#F7F7F4':'white', transition:'background 100ms' },
+        selectFn: isActive ? ()=>{ this.setState({ confirmDeleteId: null }); } : ()=>this.switchToInitiative(init.id),
+        deleteLabel,
+        deleteBtnStyle,
+        deleteFn: (e)=>{ e.stopPropagation(); this.deleteInitiative(init.id); }
+      };
+    });
+
+    const chevronStyle = { fontSize:'14px', color:'rgba(255,255,255,0.55)', display:'inline-block', transition:'transform 200ms', transform:showDropdown?'rotate(180deg)':'rotate(0deg)', marginLeft:'2px', marginTop:'6px' };
+
+    return {
+      exportData:   () => this.exportData(),
+      triggerImport:() => this.triggerImport(),
+      importData:   (e) => this.importData(e),
+      printPdf:     () => this.printConsolidated(),
+      fileInputRef: this.fileInputRef,
+
+      displayTitle: curr.initiativeName || 'Untitled backlog item',
+      businessArea: curr.businessArea||'', ticketNumber: curr.ticketNumber||'', idealDate: curr.idealDate||'',
+      hasBusinessArea: !!(curr.businessArea), hasTicket: !!(curr.ticketNumber), hasDate: !!(curr.idealDate),
+      saveStatus: curr.lastModified ? 'Saved at ' + this.formatTime(curr.lastModified) : '',
+
+      showDropdown, noInitiatives: initiatives.length === 0,
+      initiativeList, chevronStyle,
+      toggleDropdown: () => this.setState(s=>({showDropdown:!s.showDropdown, confirmDeleteId:null})),
+      closeDropdown:  () => this.setState({ showDropdown: false, confirmDeleteId: null }),
+      newInitiative:  () => { const i=this.blankInitiative(); const initiatives=[...this.state.initiatives,i]; this.setState({initiatives,currentId:i.id,showDropdown:false,activeTab:'score',confirmDeleteId:null}); this.persist(initiatives); },
+
+      tabs,
+      showScore:        activeTab==='score',
+      showEffortGuide:  activeTab==='effort-guide',
+      showQuestionnaire:activeTab==='questionnaire',
+      showTeam:         activeTab==='team',
+      showCalculations: activeTab==='calculations',
+      showGlossary:     activeTab==='glossary',
+
+      valueBands, riceCells, guideCols,
+
+      riceDisplay:rice, riceVerdict:WS.verdict,
+      ricePanelStyle, riceEyebrowStyle, riceNumStyle, riceVerdictStyle,
+      reachRating, impactRating, urgencyRating, riskRating, combinedRating, valueScore, valueSum:sumTotal, tShirtLabel:tShirtSize, effortSizeLabel, effortPoints, effortSizeBadgeStyle, effortSplitNote, effortSplitNoteStyle,
+      reachBadgeStyle, reachBadgeTextStyle,
+      impactBadgeStyle, impactBadgeTextStyle,
+      urgencyBadgeStyle, urgencyBadgeTextStyle,
+      riskBadgeStyle, riskBadgeTextStyle,
+      justIcon:JUST.icon, justLabel:JUST.label, justDesc:JUST.desc, justBannerStyle, justIconStyle,
+
+      criteria,
+      scoreHandler: (e) => {
+        const {criterion,value} = e.currentTarget.dataset;
+        const id = this.state.currentId;
+        const initiatives = this.state.initiatives.map(i=>i.id===id?{...i,scores:{...i.scores,[criterion]:parseInt(value)},lastModified:Date.now()}:i);
+        this.setState({ initiatives });
+        this.persist(initiatives);
+      },
+
+      effortKnowledge:    String(this.clampIdx(curr.effortKnowledge)),
+      effortDependencies: String(this.clampIdx(curr.effortDependencies)),
+      effortWork:         String(this.clampIdx(curr.effortWork)),
+      setKnowledge:       (e)=>this.updateCurrentField('effortKnowledge',    parseInt(e.target.value,10)),
+      setEffortDeps:      (e)=>this.updateCurrentField('effortDependencies', parseInt(e.target.value,10)),
+      setWork:            (e)=>this.updateCurrentField('effortWork',         parseInt(e.target.value,10)),
+
+      initiativeName:   curr.initiativeName||'',  requestor:    curr.requestor||'',
+      priority:         curr.priority||'Standard', dependencies: curr.dependencies||'',
+      setInitiativeName: (e)=>this.updateCurrentField('initiativeName', e.target.value),
+      setBusinessArea:   (e)=>this.updateCurrentField('businessArea',   e.target.value),
+      setTicketNumber:   (e)=>this.updateCurrentField('ticketNumber',   e.target.value),
+      setRequestor:      (e)=>this.updateCurrentField('requestor',      e.target.value),
+      setPriority:       (e)=>this.updateCurrentField('priority',       e.target.value),
+      setIdealDate:      (e)=>this.updateCurrentField('idealDate',      e.target.value),
+      setDependencies:   (e)=>this.updateCurrentField('dependencies',   e.target.value),
+
+      engageList:         curr.engageList||'',    primaryStakeholder: curr.primaryStakeholder||'',
+      stakeholdersDone:   curr.stakeholdersDone||'Not Done',
+      metWithStakeholders:curr.metWithStakeholders||'No',
+      setEngageList:         (e)=>this.updateCurrentField('engageList',          e.target.value),
+      setPrimaryStakeholder: (e)=>this.updateCurrentField('primaryStakeholder',  e.target.value),
+      setStakeholdersDone:   (e)=>this.updateCurrentField('stakeholdersDone',    e.target.value),
+      setMetWith:            (e)=>this.updateCurrentField('metWithStakeholders', e.target.value),
+
+      questionSections: this.QUESTION_SECTIONS,
+      glossaryTerms:    this.GLOSSARY_TERMS
+    };
+  }
+}
+</script>
+
+
+</body></html>
