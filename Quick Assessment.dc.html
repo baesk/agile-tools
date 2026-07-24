@@ -81,7 +81,10 @@
               <!-- Dropdown header -->
               <div style="padding: 10px 14px; background: #F2F3F7; border-bottom: 1px solid #DDDEE6; display: flex; align-items: center; justify-content: space-between;">
                 <p style="font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #000F46; margin: 0;">Saved backlog items</p>
-                <button onclick="{{ newInitiative }}" style="font-size: 12px; font-weight: 700; color: white; background: #000F46; border: none; border-radius: 2px; padding: 5px 12px; cursor: pointer;">+ New backlog item</button>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <button onclick="{{ toggleRiceSort }}" title="{{ riceSortTitle }}" style="display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 700; letter-spacing: 0.04em; color: #000F46; background: white; border: 1px solid #DDDEE6; border-radius: 2px; padding: 5px 9px; cursor: pointer;">{{ riceSortLabel }}</button>
+                  <button onclick="{{ newInitiative }}" style="font-size: 12px; font-weight: 700; color: white; background: #000F46; border: none; border-radius: 2px; padding: 5px 12px; cursor: pointer;">+ New backlog item</button>
+                </div>
               </div>
               <!-- Initiative rows -->
               <div style="max-height: 320px; overflow-y: auto;">
@@ -660,7 +663,7 @@ class Component extends DCLogic {
     };
   }
 
-  state = { activeTab: 'score', showDropdown: false, confirmDeleteId: null, currentId: null, initiatives: [] };
+  state = { activeTab: 'score', showDropdown: false, confirmDeleteId: null, currentId: null, initiatives: [], riceSort: 'desc' };
 
   fileInputRef = React.createRef();
 
@@ -1078,8 +1081,11 @@ class Component extends DCLogic {
     });
 
     // Initiative list for dropdown
-    const { confirmDeleteId } = this.state;
-    const initiativeList = initiatives.map(init => {
+    const { confirmDeleteId, riceSort } = this.state;
+    const sortedInits = [...initiatives].sort((a,b) => riceSort==='asc'
+      ? this.getRICEForInit(a) - this.getRICEForInit(b)
+      : this.getRICEForInit(b) - this.getRICEForInit(a));
+    const initiativeList = sortedInits.map(init => {
       const w = this.getRICEForInit(init);
       const wColor = w>=8?'#fff':w>=3?'#000F46':'#C8C8C8';
       const wBg    = w>=8?'#000F46':w>=3?'#F2F3F7':'#F7F7F4';
@@ -1121,6 +1127,9 @@ class Component extends DCLogic {
 
       showDropdown, noInitiatives: initiatives.length === 0,
       initiativeList, chevronStyle,
+      riceSortLabel: riceSort==='asc' ? 'RICE \u2191' : 'RICE \u2193',
+      riceSortTitle: riceSort==='asc' ? 'Sorted low to high — click for high to low' : 'Sorted high to low — click for low to high',
+      toggleRiceSort: (e) => { e.stopPropagation(); this.setState(s=>({ riceSort: s.riceSort==='asc'?'desc':'asc' })); },
       toggleDropdown: () => this.setState(s=>({showDropdown:!s.showDropdown, confirmDeleteId:null})),
       closeDropdown:  () => this.setState({ showDropdown: false, confirmDeleteId: null }),
       newInitiative:  () => { const i=this.blankInitiative(); const initiatives=[...this.state.initiatives,i]; this.setState({initiatives,currentId:i.id,showDropdown:false,activeTab:'score',confirmDeleteId:null}); this.persist(initiatives); },
