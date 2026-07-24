@@ -110,6 +110,21 @@
               <sc-if value="{{ noInitiatives }}" hint-placeholder-val="{{ false }}">
                 <p style="font-size: 13px; color: #8589A0; margin: 0; padding: 16px 14px; text-align: center;">No saved backlog items yet.</p>
               </sc-if>
+              <!-- Clear all data footer -->
+              <div style="border-top: 1px solid #DDDEE6; padding: 10px 14px; background: #F7F7F4;">
+                <sc-if value="{{ clearArmed }}" hint-placeholder-val="{{ false }}">
+                  <div style="display: flex; flex-direction: column; gap: 8px;">
+                    <p style="font-size: 12px; color: #B23A2E; font-weight: 600; margin: 0; line-height: 1.4;">This permanently removes all saved backlog items. Make sure you've exported anything you need first — this can't be undone.</p>
+                    <div style="display: flex; gap: 8px;">
+                      <button onclick="{{ confirmClearAll }}" style="flex: 1; font-size: 12px; font-weight: 700; color: white; background: #B23A2E; border: none; border-radius: 2px; padding: 7px 12px; cursor: pointer;">Clear everything</button>
+                      <button onclick="{{ cancelClearAll }}" style="flex: 1; font-size: 12px; font-weight: 700; color: #000F46; background: white; border: 1px solid #DDDEE6; border-radius: 2px; padding: 7px 12px; cursor: pointer;">Cancel</button>
+                    </div>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ clearNotArmed }}" hint-placeholder-val="{{ true }}">
+                  <button onclick="{{ armClearAll }}" style="width: 100%; font-size: 11px; font-weight: 700; letter-spacing: 0.04em; color: #B23A2E; background: white; border: 1px solid #E4C4C0; border-radius: 2px; padding: 7px 12px; cursor: pointer;">Clear all data</button>
+                </sc-if>
+              </div>
             </div>
             </div>
           </sc-if>
@@ -663,7 +678,7 @@ class Component extends DCLogic {
     };
   }
 
-  state = { activeTab: 'score', showDropdown: false, confirmDeleteId: null, currentId: null, initiatives: [], riceSort: 'desc' };
+  state = { activeTab: 'score', showDropdown: false, confirmDeleteId: null, currentId: null, initiatives: [], riceSort: 'desc', clearArmed: false };
 
   fileInputRef = React.createRef();
 
@@ -824,6 +839,13 @@ class Component extends DCLogic {
 
   persist(initiatives) {
     try { localStorage.setItem(this.STORAGE_KEY, JSON.stringify({ initiatives })); } catch(e) {}
+  }
+
+  clearAllData() {
+    try { localStorage.removeItem(this.STORAGE_KEY); } catch(e) {}
+    const init = this.blankInitiative();
+    this.setState({ initiatives: [init], currentId: init.id, showDropdown: false, confirmDeleteId: null, clearArmed: false, activeTab: 'score' });
+    this.persist([init]);
   }
 
   // ── state helpers ──
@@ -1130,8 +1152,13 @@ class Component extends DCLogic {
       riceSortLabel: riceSort==='asc' ? 'RICE \u2191' : 'RICE \u2193',
       riceSortTitle: riceSort==='asc' ? 'Sorted low to high — click for high to low' : 'Sorted high to low — click for low to high',
       toggleRiceSort: (e) => { e.stopPropagation(); this.setState(s=>({ riceSort: s.riceSort==='asc'?'desc':'asc' })); },
-      toggleDropdown: () => this.setState(s=>({showDropdown:!s.showDropdown, confirmDeleteId:null})),
-      closeDropdown:  () => this.setState({ showDropdown: false, confirmDeleteId: null }),
+      clearArmed: this.state.clearArmed,
+      clearNotArmed: !this.state.clearArmed,
+      armClearAll:    (e) => { e.stopPropagation(); this.setState({ clearArmed: true }); },
+      cancelClearAll: (e) => { e.stopPropagation(); this.setState({ clearArmed: false }); },
+      confirmClearAll:(e) => { e.stopPropagation(); this.clearAllData(); },
+      toggleDropdown: () => this.setState(s=>({showDropdown:!s.showDropdown, confirmDeleteId:null, clearArmed:false})),
+      closeDropdown:  () => this.setState({ showDropdown: false, confirmDeleteId: null, clearArmed: false }),
       newInitiative:  () => { const i=this.blankInitiative(); const initiatives=[...this.state.initiatives,i]; this.setState({initiatives,currentId:i.id,showDropdown:false,activeTab:'score',confirmDeleteId:null}); this.persist(initiatives); },
 
       tabs,
